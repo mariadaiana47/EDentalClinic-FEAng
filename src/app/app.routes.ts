@@ -76,7 +76,17 @@ export const routes: Routes = [
         path: 'patient',
         canActivate: [roleGuard],
         data: { roles: ['PATIENT'] },
-        loadComponent: () => import('./features/dashboard/patient-dashboard/patient-dashboard').then(m => m.PatientDashboard),
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./features/dashboard/patient-dashboard/patient-dashboard').then(m => m.PatientDashboard),
+          },
+          {
+            path: 'scheduling',
+            title: 'Programare Radiografie',
+            loadComponent: () => import('./features/dashboard/patient-dashboard/xray-scheduling').then(m => m.XRayScheduling),
+          }
+        ]
       },
       {
         path: 'radiologist',

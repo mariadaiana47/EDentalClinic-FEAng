@@ -21,122 +21,134 @@ import { Patient } from '../../../core/models/patient.model';
           <h1>{{ patient()?.lastName }} {{ patient()?.firstName }}</h1>
           <div class="badges">
             <span class="badge">CNP: {{ patient()?.cnp }}</span>
-            <span class="badge">{{ patient()?.gender === 'M' ? 'Bărbat' : 'Femeie' }}</span>
-            <span class="badge">{{ patient()?.age }} ani</span>
+            <span class="badge secondary">{{ patient()?.age }} ani</span>
           </div>
         </div>
         <div class="actions">
           <button class="btn-action primary" [routerLink]="['/doctor/patient', patient()?.id, 'add-clinical-exam']">
-            + Adaugă Examen Clinic
+            🦷 Examen Clinic Nou
           </button>
-          <button class="btn-action secondary" (click)="showXrayForm.set(true)">
+          <button class="btn-action accent" (click)="showXrayForm.set(true)">
             📡 Solicită Radiografie
           </button>
         </div>
       </div>
 
       <div class="dashboard-grid">
-        <!-- Sidebar Info -->
+        <!-- Sidebar: Patient Info & Health Status -->
         <div class="sidebar">
-          <div class="card">
+          <div class="card info-card">
             <h3>Date Contact</h3>
-            <p>📧 {{ patient()?.email }}</p>
-            <p>📞 {{ patient()?.phone }}</p>
-            <p>🎂 {{ patient()?.birthDate }}</p>
+            <div class="contact-item">📧 {{ patient()?.email }}</div>
+            <div class="contact-item">📞 {{ patient()?.phone }}</div>
           </div>
           
-          <div class="card status-card">
-            <h3>Status Sănătate Generală</h3>
-            <div class="status-content">
-              <p class="label">Observații Asistent:</p>
-              <p class="status-text">{{ dentalRecord()?.generalHealthStatus || 'Niciun status raportat.' }}</p>
+          <div class="card status-card highlight-status">
+            <h3>Status Sănătate (Asistent)</h3>
+            <div class="status-box">
+              <label>Analize/Stare Actuală:</label>
+              <p>{{ dentalRecord()?.generalHealthStatus || 'Nicio observație raportată.' }}</p>
             </div>
-            <div class="status-content" style="margin-top: 1rem;">
-              <p class="label">Tratamente Anterioare:</p>
-              <p class="status-text">{{ dentalRecord()?.previousTreatments || 'Fără antecedente.' }}</p>
+            <div class="status-box">
+              <label>Antecedente:</label>
+              <p>{{ dentalRecord()?.previousTreatments || 'Fără antecedente declarate.' }}</p>
             </div>
           </div>
         </div>
 
-        <!-- Main Content -->
+        <!-- Main Content: Exams, X-Rays, Treatments -->
         <div class="main-content">
           
-          <!-- X-Ray Request Form -->
-          <div *ngIf="showXrayForm()" class="card section highlight">
+          <!-- X-Ray Request Form (Modal-like) -->
+          <div *ngIf="showXrayForm()" class="card section form-card">
             <div class="section-header">
-              <h3>Cerere Radiografie Nouă</h3>
-              <button class="btn-cancel" (click)="showXrayForm.set(false)">X</button>
+              <h3>Cerere Radiografie</h3>
+              <button class="close-btn" (click)="showXrayForm.set(false)">×</button>
             </div>
-            <div class="xray-form">
-              <div class="form-row">
-                <input type="text" [(ngModel)]="newXray.teethInvolved" placeholder="Dinți vizați (ex: 18, 28)">
+            <div class="form-body">
+              <div class="input-group">
+                <input type="text" [(ngModel)]="newXray.teethInvolved" placeholder="Dinți vizați (ex: 11, 21)">
                 <select [(ngModel)]="newXray.type">
                   <option value="3D">Radiografie 3D</option>
                   <option value="Panoramica">Panoramică</option>
                   <option value="Retroalveolara">Retroalveolară</option>
                 </select>
               </div>
-              <textarea [(ngModel)]="newXray.details" placeholder="Detalii suplimentare pentru radiolog..."></textarea>
-              <button class="btn-save" (click)="saveXrayRequest()">Trimite Cererea</button>
+              <textarea [(ngModel)]="newXray.details" placeholder="Note pentru radiolog..."></textarea>
+              <button class="btn-submit" (click)="saveXrayRequest()">Trimite Cererea</button>
             </div>
           </div>
 
-          <!-- Clinical Exam -->
+          <!-- Clinical Exam Summary -->
           <div class="card section">
             <div class="section-header">
-              <h3><i class="icon">🦷</i> Examen Clinic</h3>
+              <h3>🦷 Ultimul Examen Clinic</h3>
             </div>
-            <div *ngIf="clinicalExam(); else noExam" class="exam-summary">
-              <p><strong>Dinti:</strong> {{ clinicalExam().dentalChart }}</p>
-              <p><strong>Observații:</strong> {{ clinicalExam().teethExamination }}</p>
+            <div *ngIf="clinicalExam(); else noExam" class="exam-display">
+              <div class="exam-grid">
+                <div><strong>Dinți:</strong> {{ clinicalExam().dentalChart }}</div>
+                <div><strong>Data:</strong> {{ clinicalExam().createdAt | date:'shortDate' }}</div>
+              </div>
+              <div class="exam-obs"><strong>Observații:</strong> {{ clinicalExam().teethExamination }}</div>
             </div>
-            <ng-template #noExam><div class="empty-msg">Nu există examen clinic.</div></ng-template>
+            <ng-template #noExam><div class="empty-state">Nu există examene clinice înregistrate.</div></ng-template>
           </div>
 
-          <!-- X-Ray History -->
+          <!-- X-Ray History with Viewer -->
           <div class="card section">
-            <h3><i class="icon">📷</i> Istoric Radiografii</h3>
-            <div class="xray-list">
-              <div *ngFor="let x of xrayRequests()" class="xray-container">
-                <div class="xray-item">
+            <h3>📷 Istoric Radiografii</h3>
+            <div class="xray-stack">
+              <div *ngFor="let x of xrayRequests()" class="xray-entry">
+                <div class="xray-row">
                   <div class="x-info">
-                    <span class="x-type">{{ x.type }} - Dinți: {{ x.teethInvolved }}</span>
-                    <span class="x-status" [class.status-pending]="x.status === 'PENDING'">{{ x.status }}</span>
+                    <span class="x-title">{{ x.type }} - Dinți: {{ x.teethInvolved }}</span>
+                    <span class="status-pill" [class.completed]="x.status === 'COMPLETED'">{{ x.status }}</span>
                   </div>
                   <div class="x-actions">
                     <button *ngIf="x.status === 'COMPLETED'" class="btn-view" (click)="toggleImage(x.id!)">
-                      {{ expandedXray() === x.id ? 'Ascunde' : '👁️ Vezi Radiografie' }}
+                      {{ expandedXray() === x.id ? 'Închide' : '👁️ Vezi Rezultat' }}
                     </button>
-                    <span class="x-date">{{ x.createdAt | date:'shortDate' }}</span>
+                    <span class="date-text">{{ x.createdAt | date:'dd/MM/yy' }}</span>
                   </div>
                 </div>
-                
-                <!-- Image Display -->
-                <div *ngIf="expandedXray() === x.id" class="image-viewer">
-                  <img [src]="getImageUrl(x.xray?.id)" alt="Radiografie" class="xray-img">
-                  <p class="obs" *ngIf="x.xray?.observations"><strong>Observații radiolog:</strong> {{ x.xray?.observations }}</p>
+                <div *ngIf="expandedXray() === x.id" class="viewer-container">
+                   <img [src]="getImageUrl(x.xray?.id)" alt="X-Ray" class="main-image">
+                   <p class="image-obs" *ngIf="x.xray?.observations">💬 {{ x.xray?.observations }}</p>
                 </div>
               </div>
-              <div *ngIf="xrayRequests().length === 0" class="empty-msg">Nicio cerere de radiografie.</div>
+              <div *ngIf="xrayRequests().length === 0" class="empty-state">Nicio radiografie solicitată.</div>
             </div>
           </div>
 
-          <!-- Treatments -->
+          <!-- Treatments List & Add -->
           <div class="card section">
-            <div class="section-header"><h3><i class="icon">🛠️</i> Tratamente</h3></div>
-            <div class="treatment-list">
-              <div *ngFor="let t of treatments()" class="treatment-item">
-                <div class="t-main"><strong>{{ t.description }}</strong> ({{ t.teethInvolved }})</div>
-                <div class="t-meta"><span>{{ t.cost }} RON</span></div>
+            <div class="section-header">
+              <h3>🛠️ Tratamente Efectuate</h3>
+              <button class="btn-plus" (click)="showAddTreatment.set(!showAddTreatment())">{{ showAddTreatment() ? '× Închide' : '+ Adaugă' }}</button>
+            </div>
+            
+            <div *ngIf="showAddTreatment()" class="add-treatment-form">
+               <input type="text" [(ngModel)]="newTreatment.description" placeholder="Descriere tratament">
+               <input type="text" [(ngModel)]="newTreatment.teethInvolved" placeholder="Dinți">
+               <input type="number" [(ngModel)]="newTreatment.cost" placeholder="Preț (RON)">
+               <button class="btn-save-treatment" (click)="saveTreatment()">Salvează</button>
+            </div>
+
+            <div class="treatment-table">
+              <div *ngFor="let t of treatments()" class="treatment-row">
+                <div class="t-desc"><strong>{{ t.description }}</strong> <small>({{ t.teethInvolved }})</small></div>
+                <div class="t-price">{{ t.cost }} RON</div>
+                <div class="t-date">{{ t.createdAt | date:'shortDate' }}</div>
               </div>
-              <div *ngIf="treatments().length === 0" class="empty-msg">Niciun tratament.</div>
+              <div *ngIf="treatments().length === 0" class="empty-state">Niciun tratament înregistrat încă.</div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
 
-    <ng-template #loadingTemplate><div class="loading">Se încarcă...</div></ng-template>
+    <ng-template #loadingTemplate><div class="loading-screen">Se încarcă dosarul pacientului...</div></ng-template>
   `,
   styleUrls: ['./patient-details.css']
 })
@@ -188,23 +200,32 @@ export class PatientDetails implements OnInit {
 
   saveTreatment() {
     const id = this.patient()?.id;
-    if (!id || !this.newTreatment.description) return;
-    this.treatmentService.add(id, this.newTreatment).subscribe(() => {
-      this.loadData(id);
-      this.showAddTreatment.set(false);
+    if (!id || !this.newTreatment.description) {
+      alert('Vă rugăm să introduceți o descriere pentru tratament.');
+      return;
+    }
+    
+    console.log('Saving treatment for patient:', id, this.newTreatment);
+    
+    this.treatmentService.add(id, this.newTreatment).subscribe({
+      next: () => {
+        console.log('Treatment saved successfully!');
+        this.loadData(id);
+        this.showAddTreatment.set(false);
+        this.newTreatment = { description: '', cost: 0, teethInvolved: '' };
+      },
+      error: (err) => {
+        console.error('Error saving treatment:', err);
+        alert('Eroare la salvarea tratamentului: ' + (err.error?.message || err.message));
+      }
     });
   }
 
   toggleImage(requestId: number) {
-    if (this.expandedXray() === requestId) {
-      this.expandedXray.set(null);
-    } else {
-      this.expandedXray.set(requestId);
-    }
+    this.expandedXray.set(this.expandedXray() === requestId ? null : requestId);
   }
 
   getImageUrl(xrayId: number | undefined): string {
-    if (!xrayId) return '';
-    return this.xrayService.getImageUrl(xrayId);
+    return xrayId ? this.xrayService.getImageUrl(xrayId) : '';
   }
 }
