@@ -1,0 +1,73 @@
+<div class="app-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="medical-icon">🦷</i>
+        <span>EDentalClinic</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <!-- Links for Assistant -->
+      <ng-container *ngIf="role() === 'ASSISTANT'">
+        <a routerLink="/assistant" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <i class="icon">📊</i> Dashboard
+        </a>
+        <a routerLink="/assistant/register-patient" routerLinkActive="active">
+          <i class="icon">👤+</i> Înregistrare Pacient
+        </a>
+      </ng-container>
+
+      <!-- Links for Doctor -->
+      <ng-container *ngIf="role() === 'DOCTOR'">
+        <a routerLink="/doctor" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <i class="icon">📊</i> Dashboard
+        </a>
+        <a routerLink="/doctor/search" routerLinkActive="active">
+          <i class="icon">🔍</i> Căutare Pacient
+        </a>
+        <a routerLink="/doctor/radiologists" routerLinkActive="active">
+          <i class="icon">👨‍🔬</i> Radiologi Afiliați
+        </a>
+      </ng-container>
+
+      <!-- Links for Patient -->
+      <ng-container *ngIf="role() === 'PATIENT'">
+        <a routerLink="/patient" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <i class="icon">📋</i> Dosarul Meu
+        </a>
+        <a routerLink="/patient/radiologists" routerLinkActive="active">
+          <i class="icon">🏥</i> Programare Radiografie
+        </a>
+      </ng-container>
+
+      <!-- Links for Radiologist -->
+      <ng-container *ngIf="role() === 'RADIOLOGIST'">
+        <a routerLink="/radiologist" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <i class="icon">📁</i> Cereri Primite
+        </a>
+      </ng-container>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <span class="user-email">{{ email() }}</span>
+        <span class="user-role">{{ role() }}</span>
+      </div>
+      <button class="logout-btn" (click)="logout()">
+        <i class="icon">🚪</i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="top-header">
+      <h1>{{ role() }} Panel</h1>
+    </header>
+    <div class="content-body">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
