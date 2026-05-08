@@ -1,0 +1,35 @@
+.exam-container { max-width: 1000px; margin: 0 auto; padding: 1rem; }
+.header { margin-bottom: 2rem; }
+.header h2 { color: #1e293b; font-size: 1.875rem; }
+.header p { color: #64748b; }
+
+.step-card { background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+.step-card h3 { margin-bottom: 1.5rem; color: #334155; }
+
+.patient-banner { 
+  background: #eff6ff; padding: 1rem 1.5rem; border-radius: 0.75rem; 
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
+  border-left: 4px solid #3b82f6;
+}
+.patient-info { display: flex; align-items: center; gap: 1rem; }
+.patient-info strong { font-size: 1.125rem; color: #1e3a8a; display: block; }
+.patient-info small { color: #1d4ed8; font-weight: 500; }
+.btn-change { background: white; border: 1px solid #bfdbfe; color: #3b82f6; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; }
+
+.main-form { background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+.form-section { margin-bottom: 2rem; }
+.form-section h3 { display: flex; align-items: center; gap: 0.5rem; font-size: 1.125rem; color: #334155; margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem; }
+.section-hint { font-size: 0.875rem; color: #64748b; margin-bottom: 1rem; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.sub-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+textarea, input { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; font-family: inherit; font-size: 1rem; }
+textarea:focus, input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+.input-group label { display: block; font-size: 0.875rem; font-weight: 600; color: #475569; margin-bottom: 0.5rem; }
+
+.form-actions { display: flex; justify-content: flex-end; align-items: center; gap: 1.5rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #f1f5f9; }
+.btn-primary { background: #3b82f6; color: white; border: none; padding: 0.875rem 2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.btn-primary:hover { background: #2563eb; }
+.btn-secondary { background: #f1f5f9; color: #475569; border: none; padding: 0.875rem 2rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; }
+.success-msg { color: #166534; font-weight: 600; }

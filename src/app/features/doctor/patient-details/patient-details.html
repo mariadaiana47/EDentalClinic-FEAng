@@ -1,0 +1,115 @@
+<div class="details-container" *ngIf="patient(); else loadingTemplate">
+  <!-- Top Banner -->
+  <div class="patient-header">
+    <div class="avatar-large">{{ patient()?.lastName?.[0] }}{{ patient()?.firstName?.[0] }}</div>
+    <div class="meta">
+      <h1>{{ patient()?.lastName }} {{ patient()?.firstName }}</h1>
+      <div class="badges">
+        <span class="badge">CNP: {{ patient()?.cnp }}</span>
+        <span class="badge">{{ patient()?.gender === 'M' ? 'Bărbat' : 'Femeie' }}</span>
+        <span class="badge">{{ patient()?.age }} ani</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-action primary" [routerLink]="['/doctor/patient', patient()?.id, 'add-clinical-exam']">
+        + Adaugă Examen Clinic
+      </button>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <!-- Sidebar Info -->
+    <div class="sidebar">
+      <div class="card">
+        <h3>Date Contact</h3>
+        <p>📧 {{ patient()?.email }}</p>
+        <p>📞 {{ patient()?.phone }}</p>
+        <p>🎂 {{ patient()?.birthDate }}</p>
+      </div>
+      
+      <div class="card status-card">
+        <h3>Status Sănătate Generală</h3>
+        <div class="status-content">
+          <p class="label">Observații Asistent:</p>
+          <p class="status-text">{{ dentalRecord()?.generalHealthStatus || 'Niciun status raportat.' }}</p>
+        </div>
+        <div class="status-content" style="margin-top: 1rem;">
+          <p class="label">Tratamente Anterioare:</p>
+          <p class="status-text">{{ dentalRecord()?.previousTreatments || 'Fără antecedente.' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Clinical Exam Section -->
+      <div class="card section">
+        <div class="section-header">
+          <h3><i class="icon">🦷</i> Examen Clinic</h3>
+          <span class="date" *ngIf="clinicalExam()">Actualizat la: {{ clinicalExam().createdAt | date }}</span>
+        </div>
+        
+        <div *ngIf="clinicalExam(); else noExam" class="exam-summary">
+          <div class="summary-item">
+            <strong>Dinti afectați (Schema):</strong>
+            <p>{{ clinicalExam().dentalChart || 'Niciunul' }}</p>
+          </div>
+          <div class="summary-item">
+            <strong>Observații Examen:</strong>
+            <p>{{ clinicalExam().teethExamination }}</p>
+          </div>
+        </div>
+        <ng-template #noExam>
+          <div class="empty-msg">Nu există examen clinic pentru acest pacient.</div>
+        </ng-template>
+      </div>
+
+      <!-- Treatments Section -->
+      <div class="card section">
+        <div class="section-header">
+          <h3><i class="icon">🛠️</i> Tratamente Efectuate</h3>
+          <button class="btn-small" (click)="showAddTreatment.set(true)">+ Adaugă</button>
+        </div>
+
+        <!-- Add Treatment Form Overlay/Inline -->
+        <div *ngIf="showAddTreatment()" class="add-treatment-box">
+          <div class="form-row">
+            <input type="text" [(ngModel)]="newTreatment.description" placeholder="Descriere tratament (ex: Plombă, Extracție)">
+            <input type="text" [(ngModel)]="newTreatment.teethInvolved" placeholder="Dinți (ex: 18, 17)">
+            <input type="number" [(ngModel)]="newTreatment.cost" placeholder="Preț">
+          </div>
+          <div class="form-actions">
+            <button class="btn-save" (click)="saveTreatment()">Salvează</button>
+            <button class="btn-cancel" (click)="showAddTreatment.set(false)">Anulare</button>
+          </div>
+        </div>
+
+        <div class="treatment-list">
+          <div *ngFor="let t of treatments()" class="treatment-item">
+            <div class="t-main">
+              <span class="t-desc">{{ t.description }}</span>
+              <span class="t-teeth" *ngIf="t.teethInvolved">Dinți: {{ t.teethInvolved }}</span>
+            </div>
+            <div class="t-meta">
+              <span class="t-price">{{ t.cost }} RON</span>
+              <span class="t-date">{{ t.createdAt | date:'shortDate' }}</span>
+            </div>
+          </div>
+          <div *ngIf="treatments().length === 0 && !showAddTreatment()" class="empty-msg">
+            Niciun tratament înregistrat încă.
+          </div>
+        </div>
+      </div>
+
+      <!-- X-Rays Section -->
+      <div class="card section">
+        <h3><i class="icon">📷</i> Radiografii</h3>
+        <div class="empty-msg">Nicio radiografie încărcată.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTemplate>
+  <div class="loading">Se încarcă dosarul pacientului...</div>
+</ng-template>

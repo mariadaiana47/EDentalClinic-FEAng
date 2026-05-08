@@ -1,0 +1,78 @@
+<div class="exam-container">
+  <div class="header">
+    <h2>Adăugare Examen Clinic</h2>
+    <p>Completați schema dentară și detaliile clinice ale pacientului.</p>
+  </div>
+
+  <!-- Step 1: Search Patient -->
+  <div *ngIf="!selectedPatient()" class="step-card">
+    <h3>Pasul 1: Selectați Pacientul</h3>
+    <app-patient-search (patientSelected)="onPatientSelected($event)"></app-patient-search>
+  </div>
+
+  <!-- Step 2: The Form -->
+  <div *ngIf="selectedPatient()" class="exam-form-container">
+    <div class="patient-banner">
+      <div class="patient-info">
+        <i class="icon">👤</i>
+        <div>
+          <strong>{{ selectedPatient()?.lastName }} {{ selectedPatient()?.firstName }}</strong>
+          <small>CNP: {{ selectedPatient()?.cnp }}</small>
+        </div>
+      </div>
+      <button class="btn-change" (click)="cancel()">Schimbă Pacient</button>
+    </div>
+
+    <form (submit)="onSubmit()" class="main-form">
+      <!-- Dental Chart Section -->
+      <div class="form-section">
+        <h3><i class="icon">🦷</i> Schema Dentară</h3>
+        <p class="section-hint">Selectați dinții care prezintă afecțiuni sau lucrări.</p>
+        <app-dental-chart (selectionChange)="onTeethChange($event)"></app-dental-chart>
+      </div>
+
+      <div class="grid">
+        <div class="form-section">
+          <h3><i class="icon">📖</i> Istoricul Bolii</h3>
+          <textarea [(ngModel)]="form.diseaseHistory" name="history" rows="4" placeholder="Detalii despre debutul simptomelor..."></textarea>
+        </div>
+
+        <div class="form-section">
+          <h3><i class="icon">🔍</i> Examen Dinți</h3>
+          <textarea [(ngModel)]="form.teethExamination" name="teeth" rows="4" required placeholder="Observații despre integritatea dinților..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3><i class="icon">👄</i> Examen Mucoase</h3>
+        <textarea [(ngModel)]="form.mucosaExamination" name="mucosa" rows="3" required placeholder="Starea gingiilor, mucoasei bucale..."></textarea>
+      </div>
+
+      <div class="form-section">
+        <h3><i class="icon">⚙️</i> Alte Elemente</h3>
+        <div class="sub-grid">
+          <div class="input-group">
+            <label>Creste</label>
+            <input type="text" [(ngModel)]="form.ridges" name="ridges">
+          </div>
+          <div class="input-group">
+            <label>Tuberozități</label>
+            <input type="text" [(ngModel)]="form.tuberosities" name="tuber">
+          </div>
+          <div class="input-group">
+            <label>Boltă Palatină</label>
+            <input type="text" [(ngModel)]="form.palatalVault" name="vault">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <div *ngIf="success()" class="success-msg">Examen salvat cu succes!</div>
+        <button type="button" class="btn-secondary" (click)="cancel()">Anulare</button>
+        <button type="submit" class="btn-primary" [disabled]="loading()">
+          {{ loading() ? 'Se salvează...' : 'Salvare Examen Clinic' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

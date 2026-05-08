@@ -75,17 +75,20 @@ export class Auth {
   }
 
   private persistSession(email: string, res: AuthResponse): void {
+    const normalizedRole = res.role.replace('ROLE_', '') as Role;
     localStorage.setItem(TOKEN_KEY, res.token);
-    localStorage.setItem(ROLE_KEY, res.role);
+    localStorage.setItem(ROLE_KEY, normalizedRole);
     localStorage.setItem(EMAIL_KEY, email);
     localStorage.setItem(TEMP_PWD_KEY, String(res.temporaryPassword));
-    this.currentRole.set(res.role as Role);
+    this.currentRole.set(normalizedRole);
     this.currentEmail.set(email);
     this.mustChangePassword.set(res.temporaryPassword);
   }
 
   private readRole(): Role | null {
-    const r = localStorage.getItem(ROLE_KEY);
-    return r === 'DOCTOR' || r === 'PATIENT' || r === 'ASSISTANT' || r === 'RADIOLOGIST' ? r : null;
+    const r = localStorage.getItem(ROLE_KEY)?.replace('ROLE_', '');
+    if (!r) return null;
+    const validRoles: Role[] = ['DOCTOR', 'PATIENT', 'ASSISTANT', 'RADIOLOGIST'];
+    return validRoles.includes(r as Role) ? (r as Role) : null;
   }
 }

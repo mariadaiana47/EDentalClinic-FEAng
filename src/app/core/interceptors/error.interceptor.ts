@@ -17,9 +17,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((err: HttpErrorResponse) => {
       if (err.status === 401 || err.status === 403) {
         // Token invalid sau expirat — logout si redirect la login
-        if (!req.url.includes('/auth/login')) {
+        if (!req.url.includes('/login')) {
           auth.logout();
-          router.navigate(['/auth/login']);
+          router.navigate(['/login']);
         }
       }
       return throwError(() => err);

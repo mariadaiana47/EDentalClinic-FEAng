@@ -26,6 +26,10 @@ export class PatientService extends BaseApi {
     return this.http.get<Patient>(API_ROUTES.PATIENTS.BY_ID(id));
   }
 
+  getDentalRecord(id: number): Observable<any> {
+    return this.http.get<any>(`${API_ROUTES.PATIENTS.BY_ID(id)}/dental-record`);
+  }
+
   /** Pacient logat — datele sale. */
   me(): Observable<Patient> {
     return this.http.get<Patient>(API_ROUTES.PATIENTS.ME);

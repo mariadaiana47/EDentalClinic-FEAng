@@ -7,7 +7,7 @@ export interface Patient {
   cnp: string;
   email: string;
   phone: string;
-  age: number;
+  age?: number;
   gender: Gender;
   birthDate: string; // ISO yyyy-MM-dd
   generalHealthStatus?: string;
@@ -20,7 +20,7 @@ export interface PatientRegistrationRequest {
   cnp: string;
   email: string;
   phone: string;
-  age: number;
+  age?: number;
   gender: Gender;
   birthDate: string;
   generalHealthStatus?: string;

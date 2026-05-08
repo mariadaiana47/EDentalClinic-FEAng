@@ -1,27 +1,32 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BaseApi } from './base-api';
 import { API_ROUTES } from '../constants/api-routes';
-import { Xray, XrayType } from '../models/xray.model';
 
-@Injectable({ providedIn: 'root' })
-export class XrayService extends BaseApi {
-  /** UC VIII — Radiologul incarca radiografia ca multipart/form-data. */
-  upload(requestId: number, file: File, type: XrayType, observations?: string): Observable<Xray> {
-    const fd = new FormData();
-    fd.append('file', file);
-    fd.append('type', type);
-    if (observations) fd.append('observations', observations);
-    return this.http.post<Xray>(API_ROUTES.XRAYS.UPLOAD(requestId), fd);
+export interface XRayRequest {
+  id?: number;
+  teethInvolved: string;
+  type: string;
+  details?: string;
+  status?: string;
+  createdAt?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class XRayService {
+  private http = inject(HttpClient);
+
+  create(patientId: number, request: XRayRequest): Observable<XRayRequest> {
+    return this.http.post<XRayRequest>(`${API_ROUTES.XRAY_REQUESTS.BASE}/patient/${patientId}`, request);
   }
 
-  /** URL pentru afisare/descarcare radiografie. */
-  downloadUrl(id: number): string {
-    return API_ROUTES.XRAYS.DOWNLOAD(id);
+  getByPatient(patientId: number): Observable<XRayRequest[]> {
+    return this.http.get<XRayRequest[]>(`${API_ROUTES.XRAY_REQUESTS.BASE}/patient/${patientId}`);
   }
 
-  /** UC IX — Marchez radiografia ca vizualizata de medic. */
-  markViewed(id: number): Observable<Xray> {
-    return this.http.post<Xray>(API_ROUTES.XRAYS.MARK_VIEWED(id), {});
+  getImageUrl(xrayId: number): string {
+    return `${API_ROUTES.XRAYS.BASE}/${xrayId}/image`;
   }
 }

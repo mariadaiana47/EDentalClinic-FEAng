@@ -1,17 +1,27 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { BaseApi } from './base-api';
 import { API_ROUTES } from '../constants/api-routes';
-import { Treatment } from '../models/treatment.model';
 
-@Injectable({ providedIn: 'root' })
-export class TreatmentService extends BaseApi {
-  /** UC X — Gestionare tratament: salvare/upsert. */
-  save(recordId: number, treatment: Partial<Treatment>): Observable<Treatment> {
-    return this.http.post<Treatment>(API_ROUTES.TREATMENTS.BY_RECORD(recordId), treatment);
+export interface Treatment {
+  id?: number;
+  description: string;
+  teethInvolved?: string;
+  cost?: number;
+  createdAt?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TreatmentService {
+  private http = inject(HttpClient);
+
+  add(patientId: number, treatment: Treatment): Observable<Treatment> {
+    return this.http.post<Treatment>(`${API_ROUTES.TREATMENTS.BASE}/patient/${patientId}`, treatment);
   }
 
-  byRecord(recordId: number): Observable<Treatment[]> {
-    return this.http.get<Treatment[]>(API_ROUTES.TREATMENTS.BY_RECORD(recordId));
+  getByPatient(patientId: number): Observable<Treatment[]> {
+    return this.http.get<Treatment[]>(`${API_ROUTES.TREATMENTS.BASE}/patient/${patientId}`);
   }
 }

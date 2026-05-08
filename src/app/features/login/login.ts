@@ -35,7 +35,7 @@ export class Login {
       next: (res) => {
         this.loading.set(false);
         if (res.temporaryPassword) {
-          this.router.navigate(['/auth/change-password']);
+          this.router.navigate(['/change-password']);
           return;
         }
         this.router.navigate([this.dashboardRouteFor(res.role)]);
@@ -47,12 +47,14 @@ export class Login {
     });
   }
 
-  private dashboardRouteFor(role: Role): string {
-    switch (role) {
+  private dashboardRouteFor(role: string): string {
+    const r = role.replace('ROLE_', '') as Role;
+    switch (r) {
       case 'DOCTOR': return '/doctor';
       case 'PATIENT': return '/patient';
       case 'ASSISTANT': return '/assistant';
       case 'RADIOLOGIST': return '/radiologist';
+      default: return '/login';
     }
   }
 

@@ -11,7 +11,7 @@ export const passwordChangedGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (auth.mustChangePassword()) {
-    router.navigate(['/auth/change-password']);
+    router.navigate(['/change-password']);
     return false;
   }
   return true;

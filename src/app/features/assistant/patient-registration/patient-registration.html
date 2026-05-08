@@ -1,0 +1,89 @@
+<div class="registration-container">
+  <div class="form-header">
+    <h2>Înregistrare Pacient Nou</h2>
+    <p>Introduceți datele personale și istoricul medical pentru a crea fișa pacientului.</p>
+  </div>
+
+  <form (submit)="onSubmit()" #regForm="ngForm" class="registration-form">
+    <!-- Feedback Messages -->
+    <div *ngIf="error()" class="alert alert-error">{{ error() }}</div>
+    <div *ngIf="success()" class="alert alert-success">
+      <p>{{ success() }}</p>
+      <div *ngIf="tempPassword()" class="temp-pwd-box">
+        <strong>Parolă temporară: </strong> <code>{{ tempPassword() }}</code>
+        <small>Vă rugăm să transmiteți această parolă pacientului.</small>
+      </div>
+    </div>
+
+    <!-- Section 1: Personal Data -->
+    <div class="form-section">
+      <h3><i class="icon">👤</i> Date Personale</h3>
+      <div class="grid">
+        <div class="form-group">
+          <label for="lastName">Nume *</label>
+          <input type="text" id="lastName" name="lastName" [(ngModel)]="form.lastName" required placeholder="Ex: Popescu">
+        </div>
+        <div class="form-group">
+          <label for="firstName">Prenume *</label>
+          <input type="text" id="firstName" name="firstName" [(ngModel)]="form.firstName" required placeholder="Ex: Ion">
+        </div>
+        <div class="form-group">
+          <label for="cnp">CNP *</label>
+          <input type="text" id="cnp" name="cnp" [(ngModel)]="form.cnp" required maxlength="13" minlength="13" placeholder="13 cifre">
+        </div>
+        <div class="form-group">
+          <label for="birthDate">Data Nașterii</label>
+          <input type="date" id="birthDate" name="birthDate" [(ngModel)]="form.birthDate">
+        </div>
+        <div class="form-group">
+          <label for="age">Vârstă</label>
+          <input type="number" id="age" name="age" [(ngModel)]="form.age">
+        </div>
+        <div class="form-group">
+          <label for="gender">Sex</label>
+          <select id="gender" name="gender" [(ngModel)]="form.gender">
+            <option value="M">Masculin</option>
+            <option value="F">Feminin</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Contact Info -->
+    <div class="form-section">
+      <h3><i class="icon">📞</i> Contact</h3>
+      <div class="grid">
+        <div class="form-group">
+          <label for="email">E-mail *</label>
+          <input type="email" id="email" name="email" [(ngModel)]="form.email" required placeholder="pacient@exemplu.com">
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefon</label>
+          <input type="tel" id="phone" name="phone" [(ngModel)]="form.phone" placeholder="07xx xxx xxx">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Medical History -->
+    <div class="form-section">
+      <h3><i class="icon">🏥</i> Istoric Medical (Date Generale)</h3>
+      <div class="form-group">
+        <label for="healthStatus">Starea actuală de sănătate (alergii, boli cronice, etc.)</label>
+        <textarea id="healthStatus" name="healthStatus" [(ngModel)]="form.generalHealthStatus" rows="3" placeholder="Ex: Alergic la penicilină..."></textarea>
+      </div>
+      <div class="form-group">
+        <label for="treatments">Tratamente anterioare și actuale</label>
+        <textarea id="treatments" name="treatments" [(ngModel)]="form.previousTreatments" rows="3" placeholder="Ex: Tratament pentru hipertensiune..."></textarea>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Anulare</button>
+      <button type="submit" class="btn btn-primary" [disabled]="loading() || !regForm.valid">
+        <span *ngIf="!loading()">Salvare Pacient</span>
+        <span *ngIf="loading()">Se salvează...</span>
+      </button>
+    </div>
+  </form>
+</div>

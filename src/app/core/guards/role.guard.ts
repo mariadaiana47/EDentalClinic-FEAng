@@ -12,14 +12,20 @@ export const roleGuard: CanActivateFn = (route) => {
   const allowed = (route.data?.['roles'] ?? []) as Role[];
   const current = auth.currentRole();
 
+  console.log('[RoleGuard] Checking access:', { path: route.routeConfig?.path, allowed, current });
+
   if (current && allowed.includes(current)) return true;
 
   // fallback: trimit utilizatorul la propriul dashboard daca e logat
   if (current) {
-    router.navigate([dashboardForRole(current)]);
-  } else {
-    router.navigate(['/auth/login']);
+    const target = dashboardForRole(current);
+    console.warn('[RoleGuard] Unauthorized. Redirecting to dashboard:', target);
+    router.navigate([target]);
+    return false;
   }
+
+  console.warn('[RoleGuard] No session. Redirecting to login.');
+  router.navigate(['/login']);
   return false;
 };
 

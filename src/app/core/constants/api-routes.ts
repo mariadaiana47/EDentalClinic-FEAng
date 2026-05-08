@@ -56,4 +56,7 @@ export const API_ROUTES = {
     MY: `${API}/notifications/me`,
     MARK_READ: (id: number | string) => `${API}/notifications/${id}/read`,
   },
+  CLINICAL_EXAMS: {
+    BASE: (patientId: number | string) => `${API}/patients/${patientId}/clinical-exam`,
+  },
 } as const;
