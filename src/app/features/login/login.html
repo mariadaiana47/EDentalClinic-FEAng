@@ -7,41 +7,29 @@
       <i class="bi bi-tooth"></i>
       <span>EDentalClinic</span>
     </div>
-    <p class="login-sub">Autentificare în contul tău</p>
+    <p class="login-sub">Autentificare in contul tau</p>
 
     <form (ngSubmit)="onSubmit()" #loginForm="ngForm" autocomplete="off">
       <div class="field-group">
         <label>Email</label>
-        <input
-          type="email"
-          name="email"
-          [(ngModel)]="email"
-          placeholder="email@exemplu.ro"
-          autocomplete="username"
-          required
-        />
+        <input type="email" name="email" [(ngModel)]="email" placeholder="email@exemplu.ro" autocomplete="username"
+          required />
       </div>
 
       <div class="field-group">
-        <label>Parolă</label>
-        <input
-          type="password"
-          name="password"
-          [(ngModel)]="password"
-          placeholder="••••••••"
-          autocomplete="current-password"
-          required
-        />
+        <label>Parola</label>
+        <input type="password" name="password" [(ngModel)]="password" placeholder="••••••••"
+          autocomplete="current-password" required />
       </div>
 
       @if (errorMessage()) {
-        <div class="error-msg">{{ errorMessage() }}</div>
+      <div class="error-msg">{{ errorMessage() }}</div>
       }
 
       <button type="submit" class="login-btn" [disabled]="loading()">
         <span *ngIf="!loading()">Autentificare</span>
         <span *ngIf="loading()" class="d-flex align-items-center justify-content-center gap-2">
-          <span class="spinner-border spinner-border-sm"></span> Se autentifică...
+          <span class="spinner-border spinner-border-sm"></span> Se autentifica...
         </span>
       </button>
     </form>

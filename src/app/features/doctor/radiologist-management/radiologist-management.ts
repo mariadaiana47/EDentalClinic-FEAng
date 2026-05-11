@@ -11,17 +11,17 @@ import { Radiologist } from '../../../core/models/radiologist.model';
   template: `
     <div>
       <div class="page-header">
-        <h2 class="page-title">Radiologi Afiliați</h2>
-        <p class="page-sub">Adăugați radiologi din sistem pentru a le putea trimite cereri de radiografie.</p>
+        <h2 class="page-title">Radiologi Afiliati</h2>
+        <p class="page-sub">Adaugati radiologi din sistem pentru a le putea trimite cereri de radiografie.</p>
       </div>
 
       <div class="layout-grid">
         <div class="form-panel">
           <div class="panel-head">
-            <i class="bi bi-person-plus-fill"></i> Adaugă Colaborator
+            <i class="bi bi-person-plus-fill"></i> Adauga Colaborator
           </div>
           <div class="panel-body">
-            <p class="form-hint">Introduceți emailul unui radiolog care are deja cont în sistem.</p>
+            <p class="form-hint">Introduceti emailul unui radiolog care are deja cont in sistem.</p>
             <form (submit)="addRadiologist()">
               <div class="field">
                 <label>Email Radiolog</label>
@@ -29,8 +29,8 @@ import { Radiologist } from '../../../core/models/radiologist.model';
               </div>
               <div *ngIf="errorMsg()" class="error-msg">{{ errorMsg() }}</div>
               <button type="submit" class="btn-add" [disabled]="loading()">
-                <span *ngIf="!loading()"><i class="bi bi-plus-lg"></i> Adaugă în Listă</span>
-                <span *ngIf="loading()"><span class="spinner-border spinner-border-sm me-2"></span>Se adaugă...</span>
+                <span *ngIf="!loading()"><i class="bi bi-plus-lg"></i> Adauga in Lista</span>
+                <span *ngIf="loading()"><span class="spinner-border spinner-border-sm me-2"></span>Se adauga...</span>
               </button>
             </form>
           </div>
@@ -39,7 +39,7 @@ import { Radiologist } from '../../../core/models/radiologist.model';
         <div class="list-panel">
           <div *ngIf="radiologists().length === 0" class="empty-state">
             <i class="bi bi-broadcast-pin"></i>
-            <p>Nu aveți încă radiologi în lista de colaboratori.</p>
+            <p>Nu aveti inca radiologi in lista de colaboratori.</p>
           </div>
 
           <div *ngFor="let r of radiologists()" class="rad-card">
@@ -50,7 +50,7 @@ import { Radiologist } from '../../../core/models/radiologist.model';
                 <div class="rad-role"><i class="bi bi-person-badge"></i> Radiolog</div>
               </div>
             </div>
-            <button class="btn-remove" (click)="removeRadiologist(r.id)" title="Șterge">
+            <button class="btn-remove" (click)="removeRadiologist(r.id)" title="Sterge">
               <i class="bi bi-trash3"></i>
             </button>
           </div>
@@ -156,13 +156,13 @@ export class RadiologistManagement implements OnInit {
       },
       error: (err) => {
         this.loading.set(false);
-        this.errorMsg.set(err.error?.message || 'Emailul introdus nu a fost găsit în sistem.');
+        this.errorMsg.set(err.error?.message || 'Emailul introdus nu a fost gasit in sistem.');
       }
     });
   }
 
   removeRadiologist(id: number) {
-    if (confirm('Sigur doriți să ștergeți acest radiolog din listă?')) {
+    if (confirm('Sigur doriti sa stergeti acest radiolog din lista?')) {
       this.doctorService.removeAffiliatedRadiologist(id).subscribe(() => this.loadRadiologists());
     }
   }

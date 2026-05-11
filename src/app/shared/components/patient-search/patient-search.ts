@@ -16,9 +16,9 @@ import { Patient } from '../../../core/models/patient.model';
         </span>
         <input type="text" class="form-control border-start-0 ps-0"
           [(ngModel)]="query" (keyup.enter)="onSearch()"
-          placeholder="Caută pacient după Nume sau CNP...">
+          placeholder="Cauta pacient dupa Nume sau CNP...">
         <button class="btn btn-clinic px-4" (click)="onSearch()" [disabled]="loading()">
-          <span *ngIf="!loading()">Caută</span>
+          <span *ngIf="!loading()">Cauta</span>
           <span *ngIf="loading()"><span class="spinner-border spinner-border-sm"></span></span>
         </button>
       </div>
@@ -33,13 +33,13 @@ import { Patient } from '../../../core/models/patient.model';
               <div class="text-muted small">CNP: {{ p.cnp }}</div>
             </div>
           </div>
-          <button class="btn btn-sm btn-outline-clinic">Selectează</button>
+          <button class="btn btn-sm btn-outline-clinic">Selecteaza</button>
         </div>
       </div>
 
       <div *ngIf="hasSearched() && patients().length === 0 && !loading()"
         class="text-center text-muted fst-italic py-3">
-        Niciun pacient găsit pentru "{{ query }}".
+        Niciun pacient gasit pentru "{{ query }}".
       </div>
     </div>
   `,
@@ -79,7 +79,7 @@ export class PatientSearch {
     this.loading.set(true);
     this.hasSearched.set(true);
     
-    // Simplificăm: dacă query are 13 cifre e CNP, altfel e nume
+    // Simplificam: daca query are 13 cifre e CNP, altfel e nume
     const criteria = isNaN(Number(this.query)) || this.query.length !== 13 
       ? { name: this.query } 
       : { cnp: this.query };

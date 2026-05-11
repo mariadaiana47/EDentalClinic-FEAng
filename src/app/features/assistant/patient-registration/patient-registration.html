@@ -1,16 +1,16 @@
 <div class="reg-page">
   <div class="page-header">
-    <h2 class="page-title">Înregistrare Pacient Nou</h2>
-    <p class="page-sub">Introduceți datele personale și istoricul medical pentru a crea fișa pacientului.</p>
+    <h2 class="page-title">Inregistrare Pacient Nou</h2>
+    <p class="page-sub">Introduceti datele personale si istoricul medical pentru a crea fisa pacientului.</p>
   </div>
 
   <div *ngIf="error()" class="alert-box alert-error">{{ error() }}</div>
   <div *ngIf="success()" class="alert-box alert-success">
     <p>{{ success() }}</p>
     <div *ngIf="tempPassword()" class="temp-pwd-box">
-      <strong>Parolă temporară:</strong>
+      <strong>Parola temporara:</strong>
       <code>{{ tempPassword() }}</code>
-      <br><small>Transmiteți această parolă pacientului.</small>
+      <br><small>Transmiteti aceasta parola pacientului.</small>
     </div>
   </div>
 
@@ -38,11 +38,11 @@
               placeholder="13 cifre">
           </div>
           <div class="field">
-            <label>Data Nașterii</label>
+            <label>Data Nasterii</label>
             <input type="date" name="birthDate" [(ngModel)]="form.birthDate" (change)="onBirthDateChange()">
           </div>
           <div class="field">
-            <label>Vârstă</label>
+            <label>Varsta</label>
             <input type="number" name="age" [(ngModel)]="form.age" min="0" max="150">
           </div>
         </div>
@@ -82,12 +82,12 @@
       </div>
       <div class="section-body">
         <div class="field">
-          <label>Starea actuală de sănătate (alergii, boli cronice, etc.)</label>
+          <label>Starea actuala de sanatate (alergii, boli cronice, etc.)</label>
           <textarea name="healthStatus" [(ngModel)]="form.generalHealthStatus" rows="3"
-            placeholder="Ex: Alergic la penicilină..."></textarea>
+            placeholder="Ex: Alergic la penicilina..."></textarea>
         </div>
         <div class="field">
-          <label>Tratamente anterioare și actuale</label>
+          <label>Tratamente anterioare si actuale</label>
           <textarea name="treatments" [(ngModel)]="form.previousTreatments" rows="3"
             placeholder="Ex: Tratament pentru hipertensiune..."></textarea>
         </div>
@@ -98,7 +98,7 @@
       <button type="button" class="btn-cancel" (click)="cancel()">Anulare</button>
       <button type="submit" class="btn-save" [disabled]="loading() || !regForm.valid">
         <ng-container *ngIf="!loading()"><i class="bi bi-check-lg"></i> Salvare Pacient</ng-container>
-        <ng-container *ngIf="loading()"><span class="spinner"></span> Se salvează...</ng-container>
+        <ng-container *ngIf="loading()"><span class="spinner"></span> Se salveaza...</ng-container>
       </button>
     </div>
 

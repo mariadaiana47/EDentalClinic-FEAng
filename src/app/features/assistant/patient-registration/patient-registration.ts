@@ -50,7 +50,7 @@ export class PatientRegistration {
     this.tempPassword.set(null);
 
     if (!this.form.firstName || !this.form.lastName || !this.form.cnp || !this.form.email) {
-      this.error.set('Vă rugăm să completați toate câmpurile obligatorii (*).');
+      this.error.set('Va rugam sa completati toate campurile obligatorii (*).');
       return;
     }
 
@@ -58,7 +58,7 @@ export class PatientRegistration {
     this.patientService.register(this.form).subscribe({
       next: (res) => {
         this.loading.set(false);
-        this.success.set('Pacientul a fost înregistrat cu succes!');
+        this.success.set('Pacientul a fost inregistrat cu succes!');
         if (res.temporaryPassword) {
           this.tempPassword.set(res.temporaryPassword);
         }
@@ -66,7 +66,7 @@ export class PatientRegistration {
       },
       error: (err) => {
         this.loading.set(false);
-        this.error.set(err.error?.message || 'A apărut o eroare la înregistrare. Verificați datele introduse.');
+        this.error.set(err.error?.message || 'A aparut o eroare la inregistrare. Verificati datele introduse.');
       }
     });
   }

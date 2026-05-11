@@ -12,7 +12,7 @@ import { environment } from '../../../../environments/environment';
     <div class="appointments-page">
       <div class="page-header">
         <h2 class="page-title">{{ title() }}</h2>
-        <p class="page-sub">Gestionați programările și interacțiunea cu pacienții.</p>
+        <p class="page-sub">Gestionati programarile si interactiunea cu pacientii.</p>
       </div>
 
       <div class="table-card">
@@ -23,7 +23,7 @@ import { environment } from '../../../../environments/environment';
               <th>Data & Ora</th>
               <th>Motiv</th>
               <th>Status</th>
-              <th>Acțiuni</th>
+              <th>Actiuni</th>
             </tr>
           </thead>
           <tbody>
@@ -58,7 +58,7 @@ import { environment } from '../../../../environments/environment';
               </td>
             </tr>
             <tr *ngIf="appointments().length === 0">
-              <td colspan="5" class="empty-row">Nu există programări înregistrate.</td>
+              <td colspan="5" class="empty-row">Nu exista programari inregistrate.</td>
             </tr>
           </tbody>
         </table>
@@ -104,7 +104,7 @@ export class AppointmentsManagement implements OnInit {
   
   appointments = signal<any[]>([]);
   role = signal(this.auth.currentRole());
-  title = signal(this.auth.currentRole() === 'DOCTOR' ? 'Agenda Mea' : 'Programări Clinică');
+  title = signal(this.auth.currentRole() === 'DOCTOR' ? 'Agenda Mea' : 'Programari Clinica');
 
   ngOnInit() {
     this.loadAppointments();

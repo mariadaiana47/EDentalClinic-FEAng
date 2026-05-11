@@ -12,7 +12,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
   template: `
     <div class="welcome-banner">
       <h2 class="wb-name">Programare Radiografie</h2>
-      <p class="wb-sub">Alege un radiolog colaborator și stabilește data pentru investigația ta.</p>
+      <p class="wb-sub">Alege un radiolog colaborator si stabileste data pentru investigatia ta.</p>
     </div>
 
     <div class="scheduling-content">
@@ -23,26 +23,26 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
         </div>
         <div class="section-body">
           <div class="info-row">
-            <span class="info-label">Detalii Investigație</span>
-            <span class="info-val">Dinți implicați: {{ x.teethInvolved }}</span>
+            <span class="info-label">Detalii Investigatie</span>
+            <span class="info-val">Dinti implicati: {{ x.teethInvolved }}</span>
           </div>
           <div class="info-row">
-            <span class="info-label">Medic Trimitător</span>
+            <span class="info-label">Medic Trimitator</span>
             <span class="info-val">Dr. {{ x.doctor.lastName }} {{ x.doctor.firstName }}</span>
           </div>
 
           <div class="scheduling-box">
-            <p class="sched-hint"><i class="bi bi-info-circle"></i> Alegeți un radiolog și data programării:</p>
+            <p class="sched-hint"><i class="bi bi-info-circle"></i> Alegeti un radiolog si data programarii:</p>
             <div class="sched-row">
               <select [(ngModel)]="selectedRadId" class="pd-input">
-                <option [value]="null">Selectați Radiologul</option>
+                <option [value]="null">Selectati Radiologul</option>
                 <option *ngFor="let r of affiliatedRadiologists()" [value]="r.id">
                   {{ r.firstName }} {{ r.lastName }} – {{ r.clinicName || 'Clinic' }}
                 </option>
               </select>
               <input type="datetime-local" [(ngModel)]="appointmentDate" class="pd-input">
               <button class="btn-confirm" (click)="confirmScheduling(x.id!)" [disabled]="!selectedRadId || !appointmentDate">
-                <i class="bi bi-check-lg"></i> Confirmă
+                <i class="bi bi-check-lg"></i> Confirma
               </button>
             </div>
           </div>
@@ -51,7 +51,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
 
       <div *ngIf="pendingRequests().length === 0" class="section-card">
         <div class="section-body" style="text-align: center; padding: 3rem;">
-          <p class="empty-msg">Nu aveți nicio cerere de radiografie în așteptare.</p>
+          <p class="empty-msg">Nu aveti nicio cerere de radiografie in asteptare.</p>
         </div>
       </div>
     </div>
@@ -128,7 +128,7 @@ export class XRayScheduling implements OnInit {
         appointmentTime: this.appointmentDate
       }
     }).subscribe(() => {
-      alert('Programare realizată cu succes!');
+      alert('Programare realizata cu succes!');
       this.loadRequests();
     });
   }

@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
     <div>
       <div class="welcome-banner">
         <h2 class="welcome-title">{{ greeting }}, Asistent!</h2>
-        <p class="welcome-sub">Gestionați înregistrarea pacienților și programările clinicii.</p>
+        <p class="welcome-sub">Gestionati inregistrarea pacientilor si programarile clinicii.</p>
       </div>
 
       <div class="stats-grid">
@@ -15,29 +15,29 @@ import { Component } from '@angular/core';
           <div class="stat-icon"><i class="bi bi-person-plus-fill"></i></div>
           <div class="stat-body">
             <div class="stat-value">—</div>
-            <div class="stat-label">Pacienți Noi</div>
+            <div class="stat-label">Pacienti Noi</div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon"><i class="bi bi-calendar3"></i></div>
           <div class="stat-body">
             <div class="stat-value">—</div>
-            <div class="stat-label">Programări Azi</div>
+            <div class="stat-label">Programari Azi</div>
           </div>
         </div>
       </div>
 
-      <div class="section-title">Acțiuni Administrative</div>
+      <div class="section-title">Actiuni Administrative</div>
       <div class="actions-grid">
         <a routerLink="/assistant/register-patient" class="action-card">
           <div class="action-icon"><i class="bi bi-person-plus"></i></div>
-          <div class="action-label">Înregistrare Pacient</div>
-          <div class="action-sub">creează cont și dosar</div>
+          <div class="action-label">Inregistrare Pacient</div>
+          <div class="action-sub">creeaza cont si dosar</div>
         </a>
         <a routerLink="/assistant/appointments" class="action-card">
           <div class="action-icon"><i class="bi bi-calendar3"></i></div>
-          <div class="action-label">Programări Clinică</div>
-          <div class="action-sub">vezi toată agenda</div>
+          <div class="action-label">Programari Clinica</div>
+          <div class="action-sub">vezi toata agenda</div>
         </a>
       </div>
     </div>
@@ -78,6 +78,6 @@ import { Component } from '@angular/core';
 export class AssistantDashboard {
   get greeting(): string {
     const hour = new Date().getHours();
-    return hour >= 18 || hour < 5 ? 'Bună seara' : 'Bună ziua';
+    return hour >= 18 || hour < 5 ? 'Buna seara' : 'Buna ziua';
   }
 }

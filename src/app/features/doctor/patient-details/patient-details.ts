@@ -84,7 +84,7 @@ export class PatientDetails implements OnInit {
   saveTreatment() {
     const id = this.patient()?.id;
     if (!id || !this.newTreatment.description) {
-      alert('Vă rugăm să introduceți o descriere pentru tratament.');
+      alert('Va rugam sa introduceti o descriere pentru tratament.');
       return;
     }
     

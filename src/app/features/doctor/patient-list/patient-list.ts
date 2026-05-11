@@ -12,14 +12,14 @@ import { Patient } from '../../../core/models/patient.model';
   template: `
     <div>
       <div class="page-header">
-        <h2 class="page-title">{{ isMine ? 'Pacienții Mei' : 'Listă Pacienți' }}</h2>
-        <p class="page-sub">{{ isMine ? 'Gestionați pacienții pe care îi aveți în tratament.' : 'Gestionați și vizualizați dosarele medicale ale pacienților clinicii.' }}</p>
+        <h2 class="page-title">{{ isMine ? 'Pacientii Mei' : 'Lista Pacienti' }}</h2>
+        <p class="page-sub">{{ isMine ? 'Gestionati pacientii pe care ii aveti in tratament.' : 'Gestionati si vizualizati dosarele medicale ale pacientilor clinicii.' }}</p>
       </div>
 
       <div class="search-bar">
         <i class="bi bi-search"></i>
-        <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()" placeholder="Caută după nume sau CNP...">
-        <span *ngIf="filteredPatients().length > 0" class="count-badge">{{ filteredPatients().length }} pacienți</span>
+        <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()" placeholder="Cauta dupa nume sau CNP...">
+        <span *ngIf="filteredPatients().length > 0" class="count-badge">{{ filteredPatients().length }} pacienti</span>
       </div>
 
       <div class="table-card" *ngIf="!loading(); else loadingTpl">
@@ -30,7 +30,7 @@ import { Patient } from '../../../core/models/patient.model';
               <th>CNP</th>
               <th>Telefon</th>
               <th>Status</th>
-              <th>Acțiuni</th>
+              <th>Actiuni</th>
             </tr>
           </thead>
           <tbody>
@@ -51,7 +51,7 @@ import { Patient } from '../../../core/models/patient.model';
               </td>
             </tr>
             <tr *ngIf="filteredPatients().length === 0">
-              <td colspan="5" class="empty-row">Nu s-au găsit pacienți conform criteriilor.</td>
+              <td colspan="5" class="empty-row">Nu s-au gasit pacienti conform criteriilor.</td>
             </tr>
           </tbody>
         </table>
@@ -60,7 +60,7 @@ import { Patient } from '../../../core/models/patient.model';
       <ng-template #loadingTpl>
         <div class="loading-state">
           <div class="spinner-border" style="color:#3cbdd4; width:2rem; height:2rem;"></div>
-          <p>Se încarcă lista pacienților...</p>
+          <p>Se incarca lista pacientilor...</p>
         </div>
       </ng-template>
     </div>

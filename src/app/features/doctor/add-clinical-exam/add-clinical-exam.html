@@ -1,10 +1,10 @@
 <div class="page-header">
-  <h2 class="page-title">Adăugare Examen Clinic</h2>
-  <p class="page-sub">Completați schema dentară și detaliile clinice ale pacientului.</p>
+  <h2 class="page-title">Adaugare Examen Clinic</h2>
+  <p class="page-sub">Completati schema dentara si detaliile clinice ale pacientului.</p>
 </div>
 
 <div *ngIf="!selectedPatient()" class="section-card">
-  <div class="section-head"><i class="bi bi-search"></i> Pasul 1: Selectați Pacientul</div>
+  <div class="section-head"><i class="bi bi-search"></i> Pasul 1: Selectati Pacientul</div>
   <div class="section-body">
     <app-patient-search (patientSelected)="onPatientSelected($event)"></app-patient-search>
   </div>
@@ -21,16 +21,16 @@
       </div>
     </div>
     <button *ngIf="!routeId" class="btn-outline-teal" (click)="cancel()">
-      <i class="bi bi-arrow-left"></i> Schimbă Pacient
+      <i class="bi bi-arrow-left"></i> Schimba Pacient
     </button>
   </div>
 
   <form (submit)="onSubmit()">
 
     <div class="section-card">
-      <div class="section-head"><i class="bi bi-grid-3x3-gap-fill"></i> Schema Dentară</div>
+      <div class="section-head"><i class="bi bi-grid-3x3-gap-fill"></i> Schema Dentara</div>
       <div class="section-body">
-        <p class="section-hint">Selectați dinții care prezintă afecțiuni sau lucrări.</p>
+        <p class="section-hint">Selectati dintii care prezinta afectiuni sau lucrari.</p>
         <app-dental-chart (selectionChange)="onTeethChange($event)"></app-dental-chart>
       </div>
     </div>
@@ -44,10 +44,10 @@
         </div>
       </div>
       <div class="section-card">
-        <div class="section-head"><i class="bi bi-eye-fill"></i> Examen Dinți</div>
+        <div class="section-head"><i class="bi bi-eye-fill"></i> Examen Dinti</div>
         <div class="section-body">
           <textarea class="field-textarea" [(ngModel)]="form.teethExamination" name="teeth" rows="5" required
-            placeholder="Observații despre integritatea dinților..."></textarea>
+            placeholder="Observatii despre integritatea dintilor..."></textarea>
         </div>
       </div>
     </div>
@@ -69,11 +69,11 @@
             <input type="text" [(ngModel)]="form.ridges" name="ridges" placeholder="—">
           </div>
           <div class="field">
-            <label>Tuberozități</label>
+            <label>Tuberozitati</label>
             <input type="text" [(ngModel)]="form.tuberosities" name="tuber" placeholder="—">
           </div>
           <div class="field">
-            <label>Boltă Palatină</label>
+            <label>Bolta Palatina</label>
             <input type="text" [(ngModel)]="form.palatalVault" name="vault" placeholder="—">
           </div>
         </div>
@@ -89,7 +89,7 @@
       </button>
       <button type="submit" class="btn-primary" [disabled]="loading()">
         <span *ngIf="!loading()"><i class="bi bi-floppy-fill"></i> Salvare Examen Clinic</span>
-        <span *ngIf="loading()"><span class="spinner-border spinner-border-sm me-2"></span>Se salvează...</span>
+        <span *ngIf="loading()"><span class="spinner-border spinner-border-sm me-2"></span>Se salveaza...</span>
       </button>
     </div>
 

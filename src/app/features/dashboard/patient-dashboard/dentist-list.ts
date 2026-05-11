@@ -13,8 +13,8 @@ import { ToastService } from '../../../core/services/toast.service';
   template: `
     <div class="dentist-page">
       <div class="page-header">
-        <h1 class="page-title">Echipa Noastră de Medici</h1>
-        <p class="page-sub">Alegeți specialistul potrivit pentru zâmbetul dumneavoastră.</p>
+        <h1 class="page-title">Echipa Noastra de Medici</h1>
+        <p class="page-sub">Alegeti specialistul potrivit pentru zambetul dumneavoastra.</p>
       </div>
 
       <div class="dentist-grid">
@@ -29,7 +29,7 @@ import { ToastService } from '../../../core/services/toast.service';
               <p class="doc-desc">{{ doc.description }}</p>
             </div>
             <div class="card-footer">
-              <button class="btn-book" (click)="bookAppointment(doc)">Programează Vizită</button>
+              <button class="btn-book" (click)="bookAppointment(doc)">Programeaza Vizita</button>
             </div>
           </div>
         </div>
@@ -137,14 +137,14 @@ export class DentistListComponent implements OnInit {
         patientId: p.id,
         doctorId: doc.id,
         appointmentTime: new Date(Date.now() + 86400000).toISOString().split('.')[0], // Tomorrow
-        reason: 'Consultație inițială'
+        reason: 'Consultatie initiala'
       };
       this.http.post(`${environment.apiUrl}/appointments`, body).subscribe({
         next: () => {
-          this.toastService.show(`Programare trimisă către Dr. ${doc.lastName}!`, 'success');
+          this.toastService.show(`Programare trimisa catre Dr. ${doc.lastName}!`, 'success');
         },
         error: (err) => {
-          this.toastService.show(err.error?.message || "Aveți deja o programare activă!", 'error');
+          this.toastService.show(err.error?.message || "Aveti deja o programare activa!", 'error');
         }
       });
     });

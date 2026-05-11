@@ -37,7 +37,7 @@ export interface ToothCondition {
       </div>
 
       <div class="selection-info" *ngIf="selectedTeeth().length > 0">
-        Dinți selectați: <strong>{{ selectedTeeth().join(', ') }}</strong>
+        Dinti selectati: <strong>{{ selectedTeeth().join(', ') }}</strong>
       </div>
     </div>
     </div>

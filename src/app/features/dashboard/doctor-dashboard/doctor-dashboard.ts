@@ -14,7 +14,7 @@ import { Auth } from '../../../core/auth';
       <div class="welcome-banner">
         <div>
           <h2 class="welcome-title">{{ greeting() }}, Dr. {{ auth.lastName() }}!</h2>
-          <p class="welcome-sub">Gestionați fișele medicale și cererile de radiografie ale pacienților.</p>
+          <p class="welcome-sub">Gestionati fisele medicale si cererile de radiografie ale pacientilor.</p>
         </div>
       </div>
 
@@ -23,14 +23,14 @@ import { Auth } from '../../../core/auth';
           <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
           <div class="stat-body">
             <div class="stat-value">{{ patientCount() ?? '—' }}</div>
-            <div class="stat-label">Pacienți Activi</div>
+            <div class="stat-label">Pacienti Activi</div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon"><i class="bi bi-broadcast-pin"></i></div>
           <div class="stat-body">
             <div class="stat-value">{{ radiologistCount() ?? '—' }}</div>
-            <div class="stat-label">Radiologi Afiliați</div>
+            <div class="stat-label">Radiologi Afiliati</div>
           </div>
         </div>
         <div class="stat-card">
@@ -49,17 +49,17 @@ import { Auth } from '../../../core/auth';
         </div>
       </div>
 
-      <div class="section-title">Acțiuni Rapide</div>
+      <div class="section-title">Actiuni Rapide</div>
       <div class="actions-grid">
         <a routerLink="/doctor/search" class="action-card">
           <div class="action-icon"><i class="bi bi-search"></i></div>
-          <div class="action-label">Caută Pacient</div>
-          <div class="action-sub">după CNP sau nume</div>
+          <div class="action-label">Cauta Pacient</div>
+          <div class="action-sub">dupa CNP sau nume</div>
         </a>
         <a routerLink="/doctor/patients" class="action-card">
           <div class="action-icon"><i class="bi bi-people"></i></div>
-          <div class="action-label">Pacienții Mei</div>
-          <div class="action-sub">lista completă</div>
+          <div class="action-label">Pacientii Mei</div>
+          <div class="action-sub">lista completa</div>
         </a>
         <a routerLink="/doctor/radiologists" class="action-card">
           <div class="action-icon"><i class="bi bi-broadcast-pin"></i></div>
@@ -133,7 +133,7 @@ export class DoctorDashboard implements OnInit {
   patientCount = signal<number | null>(null);
   radiologistCount = signal<number | null>(null);
 
-  readonly greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Bună seara' : 'Bună ziua');
+  readonly greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Buna seara' : 'Buna ziua');
 
   ngOnInit() {
     this.patientService.list(true).subscribe(p => this.patientCount.set(p.length));

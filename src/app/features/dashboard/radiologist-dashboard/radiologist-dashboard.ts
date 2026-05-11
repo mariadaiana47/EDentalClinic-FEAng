@@ -13,14 +13,14 @@ import { Auth } from '../../../core/auth';
   template: `
     <div class="welcome-banner">
       <h2 class="wb-name">{{ greeting() }}, Radiolog!</h2>
-      <p class="wb-sub">Gestionați cererile de investigații și încărcați rezultatele radiografice către medici.</p>
+      <p class="wb-sub">Gestionati cererile de investigatii si incarcati rezultatele radiografice catre medici.</p>
     </div>
 
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-icon"><i class="bi bi-inbox-fill"></i></div>
         <div class="stat-info">
-          <span class="stat-label">Cereri în Așteptare</span>
+          <span class="stat-label">Cereri in Asteptare</span>
           <span class="stat-val">{{ pendingRequests().length }}</span>
         </div>
       </div>
@@ -51,7 +51,7 @@ import { Auth } from '../../../core/auth';
             <div class="req-details">
               <div class="d-flex align-items-center gap-2 mb-1">
                 <span class="badge-type">{{ req.type }}</span>
-                <span class="teeth-info">Dinți: {{ req.teethInvolved }}</span>
+                <span class="teeth-info">Dinti: {{ req.teethInvolved }}</span>
               </div>
               <div class="doctor-info">
                 Trimitere: Dr. {{ req.doctor?.lastName || 'Medic' }} {{ req.doctor?.firstName || '' }}
@@ -68,25 +68,25 @@ import { Auth } from '../../../core/auth';
             <div class="upload-container">
               <label class="file-drop">
                 <i class="bi bi-cloud-upload"></i>
-                <span>{{ selectedFiles[req.id!] ? selectedFiles[req.id!].name : 'Selectați imaginea radiografiei...' }}</span>
+                <span>{{ selectedFiles[req.id!] ? selectedFiles[req.id!].name : 'Selectati imaginea radiografiei...' }}</span>
                 <input type="file" (change)="onFileSelected($event, req.id!)" hidden accept="image/*">
               </label>
               <button class="btn-confirm" 
                       [disabled]="!selectedFiles[req.id!] || uploadingId() === req.id"
                       (click)="uploadXRay(req.id!)">
-                <span *ngIf="uploadingId() !== req.id"><i class="bi bi-check-lg"></i> Finalizează</span>
+                <span *ngIf="uploadingId() !== req.id"><i class="bi bi-check-lg"></i> Finalizeaza</span>
                 <span *ngIf="uploadingId() === req.id" class="spinner-border spinner-border-sm"></span>
               </button>
             </div>
             <div *ngIf="req.details" class="req-note">
-              <i class="bi bi-info-circle"></i> Observații medic: {{ req.details }}
+              <i class="bi bi-info-circle"></i> Observatii medic: {{ req.details }}
             </div>
           </div>
         </div>
 
         <div *ngIf="pendingRequests().length === 0" class="empty-state">
           <i class="bi bi-inbox"></i>
-          <p>Nu există cereri de radiografie în așteptare.</p>
+          <p>Nu exista cereri de radiografie in asteptare.</p>
         </div>
       </div>
     </div>
@@ -153,7 +153,7 @@ export class RadiologistDashboard implements OnInit {
   uploadingId = signal<number | null>(null);
   selectedFiles: { [key: number]: File } = {};
 
-  readonly greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Bună seara' : 'Bună ziua');
+  readonly greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Buna seara' : 'Buna ziua');
 
   ngOnInit() {
     this.loadRequests();
@@ -191,11 +191,11 @@ export class RadiologistDashboard implements OnInit {
         this.uploadingId.set(null);
         delete this.selectedFiles[requestId];
         this.loadRequests();
-        alert('Radiografia a fost încărcată cu succes!');
+        alert('Radiografia a fost incarcata cu succes!');
       },
       error: () => {
         this.uploadingId.set(null);
-        alert('Eroare la încărcare.');
+        alert('Eroare la incarcare.');
       }
     });
   }

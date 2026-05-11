@@ -11,7 +11,7 @@ export const routes: Routes = [
   },
   {
     path: 'change-password',
-    title: 'Schimbare Parolă',
+    title: 'Schimbare Parola',
     canActivate: [authGuard],
     loadComponent: () => import('./features/auth/change-password/change-password').then(m => m.ChangePassword),
   },
@@ -51,12 +51,12 @@ export const routes: Routes = [
           },
           {
             path: 'search',
-            title: 'Căutare Pacient',
+            title: 'Cautare Pacient',
             loadComponent: () => import('./features/doctor/patient-list/patient-list').then(m => m.PatientList),
           },
           {
             path: 'patients',
-            title: 'Pacienții Mei',
+            title: 'Pacientii Mei',
             loadComponent: () => import('./features/doctor/patient-list/patient-list').then(m => m.PatientList),
           },
           {
@@ -66,17 +66,17 @@ export const routes: Routes = [
           },
           {
             path: 'patient/:id/add-clinical-exam',
-            title: 'Adăugare Examen Clinic',
+            title: 'Adaugare Examen Clinic',
             loadComponent: () => import('./features/doctor/add-clinical-exam/add-clinical-exam').then(m => m.AddClinicalExam),
           },
           {
             path: 'radiologists',
-            title: 'Radiologi Afiliați',
+            title: 'Radiologi Afiliati',
             loadComponent: () => import('./features/doctor/radiologist-management/radiologist-management').then(m => m.RadiologistManagement),
           },
           {
             path: 'appointments',
-            title: 'Programările Mele',
+            title: 'Programarile Mele',
             loadComponent: () => import('./features/dashboard/common/appointments-management').then(m => m.AppointmentsManagement),
           }
         ]
@@ -97,7 +97,7 @@ export const routes: Routes = [
           },
           {
             path: 'dentists',
-            title: 'Echipa Medicală',
+            title: 'Echipa Medicala',
             loadComponent: () => import('./features/dashboard/patient-dashboard/dentist-list').then(m => m.DentistListComponent),
           }
         ]

@@ -7,7 +7,7 @@
         <h2 class="pt-name">{{ patient()?.lastName }} {{ patient()?.firstName }}</h2>
         <div class="pt-badges">
           <span class="badge-pill">CNP: {{ patient()?.cnp }}</span>
-          <span class="badge-pill">{{ patient()?.gender === 'M' ? 'Bărbat' : 'Femeie' }}</span>
+          <span class="badge-pill">{{ patient()?.gender === 'M' ? 'Barbat' : 'Femeie' }}</span>
           <span class="badge-pill">{{ patient()?.age }} ani</span>
         </div>
       </div>
@@ -20,28 +20,28 @@
         <i class="bi bi-plus-circle"></i> Examen Clinic Nou
       </a>
       <button class="btn-outline-teal" (click)="showXrayForm.set(!showXrayForm())">
-        <i class="bi bi-broadcast-pin"></i> Solicită Radiografie
+        <i class="bi bi-broadcast-pin"></i> Solicita Radiografie
       </button>
     </div>
   </div>
 
   <div *ngIf="showXrayForm()" class="xray-form-panel">
     <div class="panel-head">
-      <span><i class="bi bi-broadcast-pin"></i> Cerere Nouă de Radiografie</span>
+      <span><i class="bi bi-broadcast-pin"></i> Cerere Noua de Radiografie</span>
       <button class="close-btn" (click)="showXrayForm.set(false)"><i class="bi bi-x-lg"></i></button>
     </div>
     <div class="panel-body">
       <div class="form-row-3">
         <div class="field">
-          <label>Dinți vizați</label>
+          <label>Dinti vizati</label>
           <input type="text" [(ngModel)]="newXray.teethInvolved" placeholder="ex: 11, 21">
         </div>
         <div class="field">
           <label>Tip Radiografie</label>
           <select [(ngModel)]="newXray.type">
             <option value="3D">Radiografie 3D</option>
-            <option value="Panoramica">Panoramică</option>
-            <option value="Retroalveolara">Retroalveolară</option>
+            <option value="Panoramica">Panoramica</option>
+            <option value="Retroalveolara">Retroalveolara</option>
           </select>
         </div>
         <div class="field field-btn">
@@ -53,7 +53,7 @@
       </div>
       <div class="field mt-s">
         <label>Note pentru radiolog</label>
-        <textarea [(ngModel)]="newXray.details" rows="2" placeholder="Observații suplimentare..."></textarea>
+        <textarea [(ngModel)]="newXray.details" rows="2" placeholder="Observatii suplimentare..."></textarea>
       </div>
     </div>
   </div>
@@ -72,12 +72,12 @@
       </div>
 
       <div class="section-card health-card">
-        <div class="section-head"><i class="bi bi-heart-pulse-fill"></i> Status Sănătate</div>
+        <div class="section-head"><i class="bi bi-heart-pulse-fill"></i> Status Sanatate</div>
         <div class="section-body">
-          <p class="info-label">Stare Actuală / Alergii</p>
-          <p class="info-text">{{ dentalRecord()?.generalHealthStatus || 'Nicio observație raportată.' }}</p>
+          <p class="info-label">Stare Actuala / Alergii</p>
+          <p class="info-text">{{ dentalRecord()?.generalHealthStatus || 'Nicio observatie raportata.' }}</p>
           <p class="info-label mt-12">Antecedente Tratamente</p>
-          <p class="info-text mb-0">{{ dentalRecord()?.previousTreatments || 'Fără antecedente declarate.' }}</p>
+          <p class="info-text mb-0">{{ dentalRecord()?.previousTreatments || 'Fara antecedente declarate.' }}</p>
         </div>
       </div>
 
@@ -94,11 +94,11 @@
           <div *ngIf="clinicalExam(); else noExam">
             <div class="exam-grid">
               <div>
-                <p class="info-label">Dinți afectați (Schemă)</p>
+                <p class="info-label">Dinti afectati (Schema)</p>
                 <p class="info-text mb-0">{{ clinicalExam().dentalChart || 'Nespecificat' }}</p>
               </div>
               <div>
-                <p class="info-label">Observații Dinți</p>
+                <p class="info-label">Observatii Dinti</p>
                 <p class="info-text mb-0">{{ clinicalExam().teethExamination }}</p>
               </div>
               <div *ngIf="clinicalExam().mucosaExamination">
@@ -112,7 +112,7 @@
             </div>
           </div>
           <ng-template #noExam>
-            <p class="empty-msg">Nu există examene clinice înregistrate.</p>
+            <p class="empty-msg">Nu exista examene clinice inregistrate.</p>
           </ng-template>
         </div>
       </div>
@@ -124,7 +124,7 @@
             <div class="xray-row-main">
               <div class="xray-info">
                 <span class="xray-type">{{ x.type }}</span>
-                <span class="xray-teeth">Dinți: {{ x.teethInvolved }}</span>
+                <span class="xray-teeth">Dinti: {{ x.teethInvolved }}</span>
               </div>
               <div class="xray-right">
                 <span class="xray-badge" [class.done]="x.status === 'COMPLETED'"
@@ -134,7 +134,7 @@
                 <button *ngIf="x.status === 'COMPLETED'" class="btn-eye" (click)="toggleImage(x.id!)">
                   <i class="bi" [class.bi-eye]="expandedXray() !== x.id"
                     [class.bi-eye-slash]="expandedXray() === x.id"></i>
-                  {{ expandedXray() === x.id ? 'Închide' : 'Rezultat' }}
+                  {{ expandedXray() === x.id ? 'Inchide' : 'Rezultat' }}
                 </button>
                 <span class="xray-date">{{ x.createdAt | date:'dd/MM/yy' }}</span>
               </div>
@@ -143,7 +143,7 @@
               <img [src]="getImageUrl(x.xray?.id)" alt="Radiografie">
             </div>
           </div>
-          <p *ngIf="xrayRequests().length === 0" class="empty-msg">Nicio radiografie solicitată.</p>
+          <p *ngIf="xrayRequests().length === 0" class="empty-msg">Nicio radiografie solicitata.</p>
         </div>
       </div>
 
@@ -152,7 +152,7 @@
           <span><i class="bi bi-bandaid-fill"></i> Tratamente Efectuate</span>
           <button class="btn-toggle" (click)="showAddTreatment.set(!showAddTreatment())">
             <i class="bi" [class.bi-plus-lg]="!showAddTreatment()" [class.bi-x-lg]="showAddTreatment()"></i>
-            {{ showAddTreatment() ? 'Închide' : 'Adaugă' }}
+            {{ showAddTreatment() ? 'Inchide' : 'Adauga' }}
           </button>
         </div>
         <div class="section-body">
@@ -161,10 +161,10 @@
             <div class="treatment-form-row">
               <div class="field flex-3">
                 <label>Descriere tratament</label>
-                <input type="text" [(ngModel)]="newTreatment.description" placeholder="ex: Detartraj, Obturaţie...">
+                <input type="text" [(ngModel)]="newTreatment.description" placeholder="ex: Detartraj, Obturatie...">
               </div>
               <div class="field flex-2">
-                <label>Dinți</label>
+                <label>Dinti</label>
                 <input type="text" [(ngModel)]="newTreatment.teethInvolved" placeholder="ex: 18, 17">
               </div>
               <div class="field flex-1">
@@ -192,7 +192,7 @@
             </div>
           </div>
 
-          <p *ngIf="treatments().length === 0 && !showAddTreatment()" class="empty-msg">Niciun tratament înregistrat.
+          <p *ngIf="treatments().length === 0 && !showAddTreatment()" class="empty-msg">Niciun tratament inregistrat.
           </p>
         </div>
       </div>
@@ -204,6 +204,6 @@
 <ng-template #loadingTemplate>
   <div class="loading-state">
     <div class="spinner-border" style="color:#3cbdd4; width:2.25rem; height:2.25rem;"></div>
-    <p>Se încarcă dosarul pacientului...</p>
+    <p>Se incarca dosarul pacientului...</p>
   </div>
 </ng-template>

@@ -78,7 +78,7 @@ export class AddClinicalExam implements OnInit {
       },
       error: (err) => {
         this.loading.set(false);
-        alert('Eroare la salvare: ' + (err.error?.message || 'Eroare necunoscută'));
+        alert('Eroare la salvare: ' + (err.error?.message || 'Eroare necunoscuta'));
       }
     });
   }

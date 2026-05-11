@@ -12,29 +12,29 @@ import { Router } from '@angular/router';
     <div class="cp-page">
       <div class="cp-card">
         <div class="cp-icon"><i class="bi bi-shield-lock-fill"></i></div>
-        <h2 class="cp-title">Schimbare Parolă</h2>
-        <p class="cp-sub">Trebuie să vă schimbați parola temporară înainte de a continua.</p>
+        <h2 class="cp-title">Schimbare Parola</h2>
+        <p class="cp-sub">Trebuie sa va schimbati parola temporara inainte de a continua.</p>
 
         <form (submit)="onSubmit()">
           <div *ngIf="error()" class="error-msg">{{ error() }}</div>
 
           <div class="field-group">
-            <label>Parola Curentă</label>
+            <label>Parola Curenta</label>
             <input type="password" [(ngModel)]="currentPassword" name="curr" required placeholder="••••••••">
           </div>
           <div class="field-group">
-            <label>Parola Nouă</label>
+            <label>Parola Noua</label>
             <input type="password" [(ngModel)]="newPassword" name="new" required placeholder="••••••••">
           </div>
           <div class="field-group">
-            <label>Confirmă Parola Nouă</label>
+            <label>Confirma Parola Noua</label>
             <input type="password" [(ngModel)]="confirmPassword" name="conf" required placeholder="••••••••">
           </div>
 
           <button type="submit" class="cp-btn" [disabled]="loading()">
-            <span *ngIf="!loading()">Schimbă Parola</span>
+            <span *ngIf="!loading()">Schimba Parola</span>
             <span *ngIf="loading()">
-              <span class="spinner-border spinner-border-sm me-2"></span>Se salvează...
+              <span class="spinner-border spinner-border-sm me-2"></span>Se salveaza...
             </span>
           </button>
         </form>

@@ -16,7 +16,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
     <div *ngIf="patient(); else loadingTpl">
       <div class="welcome-banner">
         <h2 class="wb-name">{{ greeting }}, {{ patient().firstName }}!</h2>
-        <p class="wb-sub">Acesta este dosarul tău medical digital EDentalClinic.</p>
+        <p class="wb-sub">Acesta este dosarul tau medical digital EDentalClinic.</p>
       </div>
 
       <div class="pd-grid">
@@ -25,12 +25,12 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
             <div class="section-head"><i class="bi bi-person-fill"></i> Date Personale</div>
             <div class="section-body">
               <div class="info-row"><span class="info-label">CNP</span><span class="info-val">{{ patient().cnp }}</span></div>
-              <div class="info-row"><span class="info-label">Vârstă</span><span class="info-val">{{ patient().age }} ani</span></div>
+              <div class="info-row"><span class="info-label">Varsta</span><span class="info-val">{{ patient().age }} ani</span></div>
               <div class="info-row last"><span class="info-label">Telefon</span><span class="info-val">{{ patient().phone }}</span></div>
             </div>
           </div>
           <div class="section-card">
-            <div class="section-head"><i class="bi bi-heart-pulse-fill"></i> Sănătate</div>
+            <div class="section-head"><i class="bi bi-heart-pulse-fill"></i> Sanatate</div>
             <div class="section-body">
               <p class="info-label">Status General</p>
               <p class="info-block">{{ dentalRecord()?.generalHealthStatus || 'Nu sunt date.' }}</p>
@@ -49,16 +49,16 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
                 <div class="xray-top">
                   <div>
                     <span class="xray-type">{{ x.type }}</span>
-                    <span class="xray-teeth">· Dinți: {{ x.teethInvolved }}</span>
+                    <span class="xray-teeth">· Dinti: {{ x.teethInvolved }}</span>
                   </div>
                   <span class="xray-badge" [class.done]="x.status === 'COMPLETED'">{{ x.status }}</span>
                 </div>
 
                 <div *ngIf="x.status === 'PENDING' && !x.selectedRadiologist" class="scheduling-box">
-                  <p class="sched-hint"><i class="bi bi-info-circle"></i> Alegeți un radiolog pentru această investigație:</p>
+                  <p class="sched-hint"><i class="bi bi-info-circle"></i> Alegeti un radiolog pentru aceasta investigatie:</p>
                   <div class="sched-row">
                     <select class="pd-input" [(ngModel)]="selectedRadId">
-                      <option [value]="null">Selectați Radiologul</option>
+                      <option [value]="null">Selectati Radiologul</option>
                       <option *ngFor="let r of affiliatedRadiologists()" [value]="r.id">
                         {{ r.firstName }} {{ r.lastName }} – {{ r.clinicName }}
                       </option>
@@ -85,7 +85,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
                   </div>
                 </div>
               </div>
-              <p *ngIf="xrayRequests().length === 0" class="empty-msg">Nu aveți cereri active.</p>
+              <p *ngIf="xrayRequests().length === 0" class="empty-msg">Nu aveti cereri active.</p>
             </div>
           </div>
 
@@ -94,15 +94,15 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
             <div class="section-body">
               <div *ngIf="clinicalExam(); else noExam" class="two-col-grid">
                 <div>
-                  <p class="info-label">Observații Medic</p>
+                  <p class="info-label">Observatii Medic</p>
                   <p class="info-block mb0">{{ clinicalExam().teethExamination }}</p>
                 </div>
                 <div>
-                  <p class="info-label">Schemă Dentară</p>
+                  <p class="info-label">Schema Dentara</p>
                   <p class="info-block mb0">{{ clinicalExam().dentalChart }}</p>
                 </div>
               </div>
-              <ng-template #noExam><p class="empty-msg">Niciun examen clinic înregistrat.</p></ng-template>
+              <ng-template #noExam><p class="empty-msg">Niciun examen clinic inregistrat.</p></ng-template>
             </div>
           </div>
 
@@ -113,7 +113,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
                 <span class="treat-desc">{{ t.description }}</span>
                 <span class="treat-cost">{{ t.cost }} RON</span>
               </div>
-              <p *ngIf="treatments().length === 0" class="empty-msg">Niciun tratament înregistrat.</p>
+              <p *ngIf="treatments().length === 0" class="empty-msg">Niciun tratament inregistrat.</p>
             </div>
           </div>
 
@@ -124,7 +124,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
     <ng-template #loadingTpl>
       <div class="loading-state">
         <div class="pd-spinner"></div>
-        <p class="loading-text">Se încarcă dosarul...</p>
+        <p class="loading-text">Se incarca dosarul...</p>
       </div>
     </ng-template>
   `,
@@ -246,7 +246,7 @@ export class PatientDashboard implements OnInit {
         appointmentTime: this.appointmentDate
       }
     }).subscribe(() => {
-      alert('Programare realizată cu succes!');
+      alert('Programare realizata cu succes!');
       this.loadMyData();
     });
   }
@@ -261,6 +261,6 @@ export class PatientDashboard implements OnInit {
 
   get greeting(): string {
     const hour = new Date().getHours();
-    return hour >= 18 || hour < 5 ? 'Bună seara' : 'Bună ziua';
+    return hour >= 18 || hour < 5 ? 'Buna seara' : 'Buna ziua';
   }
 }
