@@ -7,4 +7,5 @@ export interface AuthResponse {
   temporaryPasswordValue: string | null;
   firstName?: string;
   lastName?: string;
+  profilePictureUrl?: string;
 }

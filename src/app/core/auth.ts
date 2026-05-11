@@ -17,6 +17,7 @@ const ROLE_KEY = 'edc_role';
 const EMAIL_KEY = 'edc_email';
 const FIRST_NAME_KEY = 'edc_fname';
 const LAST_NAME_KEY = 'edc_lname';
+const PROFILE_PIC_KEY = 'edc_pic';
 const TEMP_PWD_KEY = 'edc_temp_pwd';
 
 @Injectable({
@@ -30,6 +31,7 @@ export class Auth {
   readonly currentEmail = signal<string | null>(localStorage.getItem(EMAIL_KEY));
   readonly firstName = signal<string | null>(localStorage.getItem(FIRST_NAME_KEY));
   readonly lastName = signal<string | null>(localStorage.getItem(LAST_NAME_KEY));
+  readonly profilePicture = signal<string | null>(localStorage.getItem(PROFILE_PIC_KEY));
   readonly mustChangePassword = signal<boolean>(localStorage.getItem(TEMP_PWD_KEY) === 'true');
 
 
@@ -56,12 +58,14 @@ export class Auth {
     localStorage.removeItem(EMAIL_KEY);
     localStorage.removeItem(FIRST_NAME_KEY);
     localStorage.removeItem(LAST_NAME_KEY);
+    localStorage.removeItem(PROFILE_PIC_KEY);
     localStorage.removeItem(TEMP_PWD_KEY);
     localStorage.removeItem('token');
     this.currentRole.set(null);
     this.currentEmail.set(null);
     this.firstName.set(null);
     this.lastName.set(null);
+    this.profilePicture.set(null);
     this.mustChangePassword.set(false);
   }
 
@@ -84,11 +88,13 @@ export class Auth {
     localStorage.setItem(EMAIL_KEY, email);
     if (res.firstName) localStorage.setItem(FIRST_NAME_KEY, res.firstName);
     if (res.lastName) localStorage.setItem(LAST_NAME_KEY, res.lastName);
+    if (res.profilePictureUrl) localStorage.setItem(PROFILE_PIC_KEY, res.profilePictureUrl);
     localStorage.setItem(TEMP_PWD_KEY, String(res.temporaryPassword));
     this.currentRole.set(normalizedRole);
     this.currentEmail.set(email);
     this.firstName.set(res.firstName || null);
     this.lastName.set(res.lastName || null);
+    this.profilePicture.set(res.profilePictureUrl || null);
     this.mustChangePassword.set(res.temporaryPassword);
   }
 

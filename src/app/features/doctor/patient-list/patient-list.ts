@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../../core/services/patient.service';
 import { Patient } from '../../../core/models/patient.model';
 
@@ -12,8 +12,8 @@ import { Patient } from '../../../core/models/patient.model';
   template: `
     <div>
       <div class="page-header">
-        <h2 class="page-title">Listă Pacienți</h2>
-        <p class="page-sub">Gestionați și vizualizați dosarele medicale ale pacienților clinicii.</p>
+        <h2 class="page-title">{{ isMine ? 'Pacienții Mei' : 'Listă Pacienți' }}</h2>
+        <p class="page-sub">{{ isMine ? 'Gestionați pacienții pe care îi aveți în tratament.' : 'Gestionați și vizualizați dosarele medicale ale pacienților clinicii.' }}</p>
       </div>
 
       <div class="search-bar">
@@ -122,13 +122,16 @@ export class PatientList implements OnInit {
   filteredPatients = signal<Patient[]>([]);
   loading = signal(true);
   searchQuery = '';
+  isMine = false;
+  private route = inject(ActivatedRoute);
 
   ngOnInit() {
+    this.isMine = this.router.url.includes('patients');
     this.loadPatients();
   }
 
   loadPatients() {
-    this.patientService.list().subscribe({
+    this.patientService.list(this.isMine).subscribe({
       next: (data) => {
         this.allPatients.set(data);
         this.filteredPatients.set(data);
@@ -148,9 +151,9 @@ export class PatientList implements OnInit {
     }
 
     this.filteredPatients.set(
-      this.allPatients().filter(p => 
-        p.lastName.toLowerCase().includes(query) || 
-        p.firstName.toLowerCase().includes(query) || 
+      this.allPatients().filter(p =>
+        p.lastName.toLowerCase().includes(query) ||
+        p.firstName.toLowerCase().includes(query) ||
         p.cnp.includes(query)
       )
     );

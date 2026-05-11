@@ -3,10 +3,12 @@ import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/rou
 import { Auth } from '../../core/auth';
 import { CommonModule } from '@angular/common';
 
+import { ToastComponent } from '../../shared/components/toast/toast.component';
+
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, ToastComponent],
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.css']
 })
@@ -16,6 +18,7 @@ export class MainLayout {
 
   readonly role = this.auth.currentRole;
   readonly email = this.auth.currentEmail;
+  readonly profilePicture = this.auth.profilePicture;
 
   readonly firstName = computed(() => this.email()?.split('@')[0] ?? '');
 

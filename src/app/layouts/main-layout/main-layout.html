@@ -19,6 +19,9 @@
           <a routerLink="/assistant/register-patient" routerLinkActive="active">
             <i class="bi bi-person-plus"></i><span>Înregistrare Pacient</span>
           </a>
+          <a routerLink="/assistant/appointments" routerLinkActive="active">
+            <i class="bi bi-calendar3"></i><span>Programări Clinică</span>
+          </a>
         </ng-container>
 
         <ng-container *ngIf="role() === 'DOCTOR'">
@@ -34,6 +37,9 @@
           <a routerLink="/doctor/radiologists" routerLinkActive="active">
             <i class="bi bi-broadcast-pin"></i><span>Radiologi Afiliați</span>
           </a>
+          <a routerLink="/doctor/appointments" routerLinkActive="active">
+            <i class="bi bi-calendar-event"></i><span>Programările Mele</span>
+          </a>
         </ng-container>
 
         <ng-container *ngIf="role() === 'PATIENT'">
@@ -42,6 +48,9 @@
           </a>
           <a routerLink="/patient/scheduling" routerLinkActive="active">
             <i class="bi bi-calendar-plus"></i><span>Programare Radiografie</span>
+          </a>
+          <a routerLink="/patient/dentists" routerLinkActive="active">
+            <i class="bi bi-people"></i><span>Echipa Medicală</span>
           </a>
         </ng-container>
 
@@ -55,7 +64,10 @@
 
       <div class="sidebar-footer">
         <div class="user-row">
-          <div class="user-avatar">{{ email()?.[0]?.toUpperCase() }}</div>
+          <div class="user-avatar">
+            <img *ngIf="profilePicture()" [src]="profilePicture()" alt="Avatar" class="avatar-img">
+            <span *ngIf="!profilePicture()">{{ email()?.[0]?.toUpperCase() }}</span>
+          </div>
           <div class="user-info">
             <div class="user-email">{{ email() }}</div>
             <div class="user-role">{{ role() }}</div>
@@ -77,4 +89,5 @@
     </div>
 
   </div>
+  <app-toast></app-toast>
 </div>

@@ -9,9 +9,10 @@ export interface Patient {
   phone: string;
   age?: number;
   gender: Gender;
-  birthDate: string; // ISO yyyy-MM-dd
+  birthDate: string;
   generalHealthStatus?: string;
   previousTreatments?: string;
+  assignedDoctors?: any[];
 }
 
 export interface PatientRegistrationRequest {

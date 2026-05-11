@@ -185,7 +185,6 @@ export class RadiologistDashboard implements OnInit {
     this.uploadingId.set(requestId);
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('observations', 'Încărcat din dashboard radiolog');
 
     this.http.post(`${API_ROUTES.XRAYS.BASE}/upload/${requestId}`, formData).subscribe({
       next: () => {

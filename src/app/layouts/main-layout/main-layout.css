@@ -112,8 +112,8 @@
 }
 
 .user-avatar {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: linear-gradient(135deg, #4bb8d0, #2891a8);
   color: #fff;
@@ -123,6 +123,15 @@
   font-weight: 700;
   font-size: 0.8rem;
   flex-shrink: 0;
+  overflow: hidden;
+  border: 1.5px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .user-info {

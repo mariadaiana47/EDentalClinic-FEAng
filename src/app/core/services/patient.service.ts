@@ -16,8 +16,8 @@ export class PatientService extends BaseApi {
     return this.http.get<Patient[]>(API_ROUTES.PATIENTS.SEARCH, { params: { ...criteria } as any });
   }
 
-  list(): Observable<Patient[]> {
-    return this.http.get<Patient[]>(API_ROUTES.PATIENTS.BASE);
+  list(mine: boolean = false): Observable<Patient[]> {
+    return this.http.get<Patient[]>(API_ROUTES.PATIENTS.BASE, { params: { mine: mine.toString() } });
   }
 
   byId(id: number): Observable<Patient> {

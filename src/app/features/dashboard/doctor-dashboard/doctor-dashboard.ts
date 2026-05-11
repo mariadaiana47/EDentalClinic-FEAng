@@ -13,7 +13,7 @@ import { Auth } from '../../../core/auth';
     <div>
       <div class="welcome-banner">
         <div>
-          <h2 class="welcome-title">{{ greeting() }}, Doctor!</h2>
+          <h2 class="welcome-title">{{ greeting() }}, Dr. {{ auth.lastName() }}!</h2>
           <p class="welcome-sub">Gestionați fișele medicale și cererile de radiografie ale pacienților.</p>
         </div>
       </div>
@@ -136,7 +136,7 @@ export class DoctorDashboard implements OnInit {
   readonly greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Bună seara' : 'Bună ziua');
 
   ngOnInit() {
-    this.patientService.list().subscribe(p => this.patientCount.set(p.length));
+    this.patientService.list(true).subscribe(p => this.patientCount.set(p.length));
     this.doctorService.listAffiliatedRadiologists().subscribe(r => this.radiologistCount.set(r.length));
   }
 }

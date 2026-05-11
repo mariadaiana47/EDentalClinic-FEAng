@@ -32,6 +32,10 @@ export const routes: Routes = [
           {
             path: 'register-patient',
             loadComponent: () => import('./features/assistant/patient-registration/patient-registration').then(m => m.PatientRegistration),
+          },
+          {
+            path: 'appointments',
+            loadComponent: () => import('./features/dashboard/common/appointments-management').then(m => m.AppointmentsManagement),
           }
         ]
       },
@@ -69,6 +73,11 @@ export const routes: Routes = [
             path: 'radiologists',
             title: 'Radiologi Afiliați',
             loadComponent: () => import('./features/doctor/radiologist-management/radiologist-management').then(m => m.RadiologistManagement),
+          },
+          {
+            path: 'appointments',
+            title: 'Programările Mele',
+            loadComponent: () => import('./features/dashboard/common/appointments-management').then(m => m.AppointmentsManagement),
           }
         ]
       },
@@ -85,6 +94,11 @@ export const routes: Routes = [
             path: 'scheduling',
             title: 'Programare Radiografie',
             loadComponent: () => import('./features/dashboard/patient-dashboard/xray-scheduling').then(m => m.XRayScheduling),
+          },
+          {
+            path: 'dentists',
+            title: 'Echipa Medicală',
+            loadComponent: () => import('./features/dashboard/patient-dashboard/dentist-list').then(m => m.DentistListComponent),
           }
         ]
       },

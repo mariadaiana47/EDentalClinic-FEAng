@@ -13,6 +13,9 @@
       </div>
     </div>
     <div class="pt-actions">
+      <button *ngIf="!isAssigned()" class="btn-pickup" (click)="assignPatient()">
+        <i class="bi bi-person-check"></i> Preia Pacient
+      </button>
       <a class="btn-primary-teal" [routerLink]="['/doctor/patient', patient()?.id, 'add-clinical-exam']">
         <i class="bi bi-plus-circle"></i> Examen Clinic Nou
       </a>
@@ -138,9 +141,6 @@
             </div>
             <div *ngIf="expandedXray() === x.id" class="xray-viewer">
               <img [src]="getImageUrl(x.xray?.id)" alt="Radiografie">
-              <p *ngIf="x.xray?.observations" class="xray-obs">
-                <i class="bi bi-chat-left-text"></i> {{ x.xray?.observations }}
-              </p>
             </div>
           </div>
           <p *ngIf="xrayRequests().length === 0" class="empty-msg">Nicio radiografie solicitată.</p>

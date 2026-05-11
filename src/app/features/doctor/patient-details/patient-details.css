@@ -73,12 +73,6 @@
   padding: 0.55rem 1.1rem;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.15s;
-}
-
-.btn-primary-teal:hover {
-  background: #2aa8bf;
-  color: #fff;
 }
 
 .btn-primary-teal.w-full {
@@ -98,12 +92,20 @@
   font-size: 0.875rem;
   padding: 0.55rem 1.1rem;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
 }
 
-.btn-outline-teal:hover {
-  background: #3cbdd4;
-  color: #fff;
+.btn-pickup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #f0fbfd;
+  border: 1px solid #3cbdd4;
+  border-radius: 0.45rem;
+  color: #3cbdd4;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
 }
 
 .xray-form-panel {

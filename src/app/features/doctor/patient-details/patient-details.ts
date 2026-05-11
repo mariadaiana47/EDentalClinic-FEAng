@@ -7,6 +7,9 @@ import { ClinicalExamService } from '../../../core/services/clinical-exam.servic
 import { TreatmentService, Treatment } from '../../../core/services/treatment.service';
 import { XRayService, XRayRequest } from '../../../core/services/xray.service';
 import { Patient } from '../../../core/models/patient.model';
+import { HttpClient } from '@angular/common/http';
+import { Auth } from '../../../core/auth';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-patient-details',
@@ -21,6 +24,8 @@ export class PatientDetails implements OnInit {
   private examService = inject(ClinicalExamService);
   private treatmentService = inject(TreatmentService);
   private xrayService = inject(XRayService);
+  private http = inject(HttpClient);
+  private auth = inject(Auth);
 
   patient = signal<Patient | null>(null);
   dentalRecord = signal<any>(null);
@@ -35,6 +40,7 @@ export class PatientDetails implements OnInit {
   showXrayForm = signal(false);
   
   expandedXray = signal<number | null>(null);
+  isAssigned = signal<boolean>(false);
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -44,11 +50,25 @@ export class PatientDetails implements OnInit {
   }
 
   loadData(id: number) {
-    this.patientService.byId(id).subscribe(p => this.patient.set(p));
+    this.patientService.byId(id).subscribe(p => {
+      this.patient.set(p);
+      const email = this.auth.currentEmail();
+      const assigned = p.assignedDoctors?.some((d: any) => d.email === email);
+      this.isAssigned.set(!!assigned);
+    });
     this.patientService.getDentalRecord(id).subscribe(r => this.dentalRecord.set(r));
     this.examService.getByPatientId(id).subscribe(e => this.clinicalExam.set(e));
     this.treatmentService.getByPatient(id).subscribe(t => this.treatments.set(t));
     this.xrayService.getByPatient(id).subscribe(x => this.xrayRequests.set(x));
+  }
+
+  assignPatient() {
+    const id = this.patient()?.id;
+    if (!id) return;
+    this.http.post(`${environment.apiUrl}/patients/${id}/assign`, null, { responseType: 'text' }).subscribe(() => {
+      this.isAssigned.set(true);
+      alert('Pacient preluat cu succes!');
+    });
   }
 
   saveXrayRequest() {
@@ -68,17 +88,13 @@ export class PatientDetails implements OnInit {
       return;
     }
     
-    console.log('Saving treatment for patient:', id, this.newTreatment);
-    
     this.treatmentService.add(id, this.newTreatment).subscribe({
       next: () => {
-        console.log('Treatment saved successfully!');
         this.loadData(id);
         this.showAddTreatment.set(false);
         this.newTreatment = { description: '', cost: 0, teethInvolved: '' };
       },
       error: (err) => {
-        console.error('Error saving treatment:', err);
         alert('Eroare la salvarea tratamentului: ' + (err.error?.message || err.message));
       }
     });
