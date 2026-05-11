@@ -177,7 +177,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
     .treatment-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #f3f4f6; }
     .treatment-row:last-child { border-bottom: none; }
     .treat-desc { color: #374151; font-weight: 500; font-size: 0.875rem; }
-    .treat-cost { font-weight: 700; color: #059669; font-size: 0.875rem; }
+    .treat-cost { font-weight: 700; color: #3cbdd4; font-size: 0.875rem; }
 
     .empty-msg { color: #9ca3af; font-style: italic; font-size: 0.875rem; margin: 0; }
 

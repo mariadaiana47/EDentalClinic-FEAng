@@ -25,7 +25,7 @@ import { Auth } from '../../../core/auth';
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon"><i class="bi bi-check-circle-fill" style="color: #10b981;"></i></div>
+        <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
         <div class="stat-info">
           <span class="stat-label">Cereri Finalizate</span>
           <span class="stat-val">{{ completedCount() }}</span>
