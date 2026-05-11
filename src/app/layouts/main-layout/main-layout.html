@@ -1,18 +1,17 @@
 <div class="shell">
   <div class="app-wrapper">
 
-    <!-- ── Sidebar ── -->
     <aside class="sidebar">
       <div class="sidebar-brand">
         <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 0C5.373 0 4 2.314 4 4c0 .991-.722 3.696-1.84 5.504-.485.784-.91 1.497-1.11 2.35-.165.71-.163 1.51.63 2.05.75.51 1.908.414 2.926-.296.435-.305.92-.48 1.394-.48s.96.175 1.394.48c1.018.71 2.176.806 2.926.296.793-.54.795-1.34.63-2.05-.2-.853-.625-1.566-1.11-2.35C10.722 7.696 10 4.991 10 4c0-1.686-1.373-4-2-4zm0 1c.28 0 1 1.373 1 3 0 1.18.832 4.073 1.91 5.814.455.736.795 1.315.955 2.003.123.528.058.78-.123.903-.393.268-1.168.158-1.91-.35C9.22 11.945 8.61 11.72 8 11.72s-1.22.225-1.832.65c-.742.508-1.517.618-1.91.35-.18-.123-.246-.375-.123-.903.16-.688.5-1.267.955-2.003C6.168 8.073 7 5.18 7 4c0-1.627.72-3 1-3z"/>
+          <path
+            d="M8 0C5.373 0 4 2.314 4 4c0 .991-.722 3.696-1.84 5.504-.485.784-.91 1.497-1.11 2.35-.165.71-.163 1.51.63 2.05.75.51 1.908.414 2.926-.296.435-.305.92-.48 1.394-.48s.96.175 1.394.48c1.018.71 2.176.806 2.926.296.793-.54.795-1.34.63-2.05-.2-.853-.625-1.566-1.11-2.35C10.722 7.696 10 4.991 10 4c0-1.686-1.373-4-2-4zm0 1c.28 0 1 1.373 1 3 0 1.18.832 4.073 1.91 5.814.455.736.795 1.315.955 2.003.123.528.058.78-.123.903-.393.268-1.168.158-1.91-.35C9.22 11.945 8.61 11.72 8 11.72s-1.22.225-1.832.65c-.742.508-1.517.618-1.91.35-.18-.123-.246-.375-.123-.903.16-.688.5-1.267.955-2.003C6.168 8.073 7 5.18 7 4c0-1.627.72-3 1-3z" />
         </svg>
         <span class="brand-name">EDentalClinic</span>
       </div>
 
       <nav class="sidebar-nav">
 
-        <!-- ASSISTANT -->
         <ng-container *ngIf="role() === 'ASSISTANT'">
           <a routerLink="/assistant" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
             <i class="bi bi-grid-1x2"></i><span>Dashboard</span>
@@ -22,7 +21,6 @@
           </a>
         </ng-container>
 
-        <!-- DOCTOR -->
         <ng-container *ngIf="role() === 'DOCTOR'">
           <a routerLink="/doctor" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
             <i class="bi bi-grid-1x2"></i><span>Dashboard</span>
@@ -38,7 +36,6 @@
           </a>
         </ng-container>
 
-        <!-- PATIENT -->
         <ng-container *ngIf="role() === 'PATIENT'">
           <a routerLink="/patient" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
             <i class="bi bi-folder2-open"></i><span>Dosarul Meu</span>
@@ -48,10 +45,9 @@
           </a>
         </ng-container>
 
-        <!-- RADIOLOGIST -->
         <ng-container *ngIf="role() === 'RADIOLOGIST'">
           <a routerLink="/radiologist" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
-            <i class="bi bi-inbox"></i><span>Cereri Primite</span>
+            <i class="bi bi-grid-1x2"></i><span>Dashboard</span>
           </a>
         </ng-container>
 
@@ -71,14 +67,10 @@
       </div>
     </aside>
 
-    <!-- ── Main ── -->
     <div class="main-col">
-      <!-- Top header -->
       <header class="top-header">
-        <span class="page-title">{{ roleLabel() }}</span>
       </header>
 
-      <!-- Content -->
       <div class="content-area">
         <router-outlet></router-outlet>
       </div>

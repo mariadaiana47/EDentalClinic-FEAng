@@ -7,7 +7,7 @@ export interface XrayRequest {
   patientName?: string;
   doctorId: number;
   doctorName?: string;
-  affectedTeeth: string[]; // ex. ["11", "12"]
+  affectedTeeth: string[];
   xrayType: XrayType;
   details?: string;
   status: XrayRequestStatus;

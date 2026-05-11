@@ -14,18 +14,18 @@ export class MainLayout {
   private auth = inject(Auth);
   private router = inject(Router);
 
-  readonly role  = this.auth.currentRole;
+  readonly role = this.auth.currentRole;
   readonly email = this.auth.currentEmail;
 
   readonly firstName = computed(() => this.email()?.split('@')[0] ?? '');
 
   readonly roleLabel = computed(() => {
     switch (this.role()) {
-      case 'DOCTOR':      return 'Portal Medic Stomatolog';
-      case 'PATIENT':     return 'Dosarul Meu Medical';
-      case 'ASSISTANT':   return 'Portal Asistent';
+      case 'DOCTOR': return 'Portal Medic Stomatolog';
+      case 'PATIENT': return 'Dosarul Meu Medical';
+      case 'ASSISTANT': return 'Portal Asistent';
       case 'RADIOLOGIST': return 'Portal Radiolog';
-      default:            return 'EDentalClinic';
+      default: return 'EDentalClinic';
     }
   });
 

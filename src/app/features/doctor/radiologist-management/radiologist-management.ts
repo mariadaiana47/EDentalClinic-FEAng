@@ -16,7 +16,6 @@ import { Radiologist } from '../../../core/models/radiologist.model';
       </div>
 
       <div class="layout-grid">
-        <!-- Add Form -->
         <div class="form-panel">
           <div class="panel-head">
             <i class="bi bi-person-plus-fill"></i> Adaugă Colaborator
@@ -37,7 +36,6 @@ import { Radiologist } from '../../../core/models/radiologist.model';
           </div>
         </div>
 
-        <!-- List -->
         <div class="list-panel">
           <div *ngIf="radiologists().length === 0" class="empty-state">
             <i class="bi bi-broadcast-pin"></i>
@@ -67,7 +65,6 @@ import { Radiologist } from '../../../core/models/radiologist.model';
 
     .layout-grid { display: grid; grid-template-columns: 340px 1fr; gap: 1.5rem; align-items: start; }
 
-    /* Form panel */
     .form-panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; }
     .panel-head {
       background: #f7fdfe; border-bottom: 1px solid #d9f2f7;
@@ -95,7 +92,6 @@ import { Radiologist } from '../../../core/models/radiologist.model';
     .btn-add:hover:not(:disabled) { background: #2aa8bf; }
     .btn-add:disabled { background: #a8dfe9; cursor: not-allowed; }
 
-    /* List panel */
     .list-panel { display: flex; flex-direction: column; gap: 0.75rem; }
 
     .empty-state {

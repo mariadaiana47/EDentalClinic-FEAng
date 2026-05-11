@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   template: `
     <div>
       <div class="welcome-banner mb-4">
-        <h2 class="fw-bold mb-1">Bun venit, Asistent!</h2>
+        <h2 class="fw-bold mb-1">{{ greeting }}, Asistent!</h2>
         <p class="mb-0 opacity-75">Gestionați înregistrarea pacienților și dosarele clinicii.</p>
       </div>
       <div class="row g-3">
@@ -39,4 +39,9 @@ import { Component } from '@angular/core';
     .stat-value { font-size: 1.75rem; font-weight: 700; color: #1a202c; }
   `]
 })
-export class AssistantDashboard {}
+export class AssistantDashboard {
+  get greeting(): string {
+    const hour = new Date().getHours();
+    return hour >= 18 || hour < 5 ? 'Bună seara' : 'Bună ziua';
+  }
+}

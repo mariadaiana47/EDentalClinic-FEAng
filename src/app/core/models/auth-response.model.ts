@@ -5,4 +5,6 @@ export interface AuthResponse {
   role: Role;
   temporaryPassword: boolean;
   temporaryPasswordValue: string | null;
+  firstName?: string;
+  lastName?: string;
 }

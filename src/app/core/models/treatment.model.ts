@@ -12,7 +12,7 @@ export interface ProstheticWork {
   type: ProstheticType;
   teeth: string[];
   material?: string;
-  performedBy?: string; // medic / tehnician
+  performedBy?: string;
   performedDate?: string;
   cost?: number;
 }

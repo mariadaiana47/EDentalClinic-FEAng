@@ -1,4 +1,3 @@
-/** Notatia FDI: sferturi 1-4 (adult) si 5-8 (lapte), dinti 1-8. */
 export type ToothCondition =
   | 'HEALTHY'
   | 'CARIES'
@@ -10,7 +9,7 @@ export type ToothCondition =
   | 'ROOT_CANAL';
 
 export interface ToothEntry {
-  toothNumber: string; // ex. "11", "32"
+  toothNumber: string;
   condition: ToothCondition;
   notes?: string;
 }

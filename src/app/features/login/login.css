@@ -1,4 +1,3 @@
-/* ── Page ── */
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -8,7 +7,6 @@
   padding: 1rem;
 }
 
-/* ── Glass card ── */
 .login-card {
   width: 100%;
   max-width: 420px;
@@ -18,7 +16,6 @@
   padding: 3rem 2.5rem 2.5rem;
 }
 
-/* ── Brand ── */
 .login-brand {
   display: flex;
   align-items: center;
@@ -43,7 +40,6 @@
   text-align: center;
 }
 
-/* ── Field group ── */
 .field-group {
   display: flex;
   flex-direction: column;
@@ -82,7 +78,6 @@
   background: rgba(60, 189, 212, 0.08);
 }
 
-/* ── Error ── */
 .error-msg {
   background: rgba(239, 68, 68, 0.15);
   border: 1px solid rgba(239, 68, 68, 0.35);
@@ -92,7 +87,6 @@
   margin-bottom: 1.25rem;
 }
 
-/* ── Button ── */
 .login-btn {
   display: block;
   width: 100%;
@@ -118,7 +112,6 @@
   cursor: not-allowed;
 }
 
-/* ── Responsive ── */
 @media (max-width: 480px) {
   .login-card {
     padding: 2rem 1.5rem 2rem;

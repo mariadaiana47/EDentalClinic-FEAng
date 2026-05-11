@@ -15,12 +15,11 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
   template: `
     <div *ngIf="patient(); else loadingTpl">
       <div class="welcome-banner">
-        <h2 class="wb-name">Bună, {{ patient().firstName }}!</h2>
+        <h2 class="wb-name">{{ greeting }}, {{ patient().firstName }}!</h2>
         <p class="wb-sub">Acesta este dosarul tău medical digital EDentalClinic.</p>
       </div>
 
       <div class="pd-grid">
-        <!-- Left: Personal info -->
         <div class="pd-left">
           <div class="section-card">
             <div class="section-head"><i class="bi bi-person-fill"></i> Date Personale</div>
@@ -41,10 +40,8 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
           </div>
         </div>
 
-        <!-- Right: Records -->
         <div class="pd-right">
 
-          <!-- X-Ray Requests -->
           <div class="section-card">
             <div class="section-head"><i class="bi bi-image-fill"></i> Cererile Mele de Radiografie</div>
             <div class="section-body">
@@ -92,7 +89,6 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
             </div>
           </div>
 
-          <!-- Clinical Exam -->
           <div class="section-card">
             <div class="section-head"><i class="bi bi-clipboard2-pulse-fill"></i> Examen Clinic</div>
             <div class="section-body">
@@ -110,7 +106,6 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
             </div>
           </div>
 
-          <!-- Treatments -->
           <div class="section-card">
             <div class="section-head"><i class="bi bi-bandaid-fill"></i> Tratamente Efectuate</div>
             <div class="section-body">
@@ -221,26 +216,22 @@ export class PatientDashboard implements OnInit {
   }
 
   loadMyData() {
-    // 1. Get Me
     this.http.get(API_ROUTES.PATIENTS.ME).subscribe((p: any) => {
       this.patient.set(p);
       const patientId = p.id;
 
-      // 2. Load Records
       this.patientService.getDentalRecord(patientId).subscribe(r => this.dentalRecord.set(r));
       this.treatmentService.getByPatient(patientId).subscribe(t => this.treatments.set(t));
       this.examService.getByPatientId(patientId).subscribe(e => this.clinicalExam.set(e));
-      
-      // 3. Load X-Ray Requests
+
       this.http.get<any[]>(`${API_ROUTES.XRAY_REQUESTS.BASE}/my-patient`).subscribe(xrays => {
         this.xrayRequests.set(xrays);
-        
-        // If there's a request, get affiliated radiologists of the doctor
+
         if (xrays.length > 0) {
-            const doctorId = xrays[0].doctor.id;
-            this.http.get<any[]>(`${API_ROUTES.DOCTORS.BASE}/${doctorId}/radiologists`).subscribe(rads => {
-                this.affiliatedRadiologists.set(rads);
-            });
+          const doctorId = xrays[0].doctor.id;
+          this.http.get<any[]>(`${API_ROUTES.DOCTORS.BASE}/${doctorId}/radiologists`).subscribe(rads => {
+            this.affiliatedRadiologists.set(rads);
+          });
         }
       });
     });
@@ -250,13 +241,13 @@ export class PatientDashboard implements OnInit {
     if (!this.selectedRadId || !this.appointmentDate) return;
 
     this.http.post(`${API_ROUTES.XRAY_REQUESTS.BASE}/${requestId}/select-radiologist`, null, {
-        params: {
-            radiologistId: this.selectedRadId.toString(),
-            appointmentTime: this.appointmentDate
-        }
+      params: {
+        radiologistId: this.selectedRadId.toString(),
+        appointmentTime: this.appointmentDate
+      }
     }).subscribe(() => {
-        alert('Programare realizată cu succes!');
-        this.loadMyData();
+      alert('Programare realizată cu succes!');
+      this.loadMyData();
     });
   }
 
@@ -266,5 +257,10 @@ export class PatientDashboard implements OnInit {
 
   getImageUrl(xrayId: number | undefined) {
     return xrayId ? this.xrayService.getImageUrl(xrayId) : '';
+  }
+
+  get greeting(): string {
+    const hour = new Date().getHours();
+    return hour >= 18 || hour < 5 ? 'Bună seara' : 'Bună ziua';
   }
 }

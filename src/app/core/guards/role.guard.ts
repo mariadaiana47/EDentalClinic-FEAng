@@ -2,10 +2,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { Auth, Role } from '../auth';
 
-/**
- * Permite accesul doar daca rolul curent e in lista din `data.roles`.
- * Folosire in routes: { path: 'doctor', canActivate: [authGuard, roleGuard], data: { roles: ['DOCTOR'] } }
- */
+
 export const roleGuard: CanActivateFn = (route) => {
   const auth = inject(Auth);
   const router = inject(Router);
@@ -16,7 +13,6 @@ export const roleGuard: CanActivateFn = (route) => {
 
   if (current && allowed.includes(current)) return true;
 
-  // fallback: trimit utilizatorul la propriul dashboard daca e logat
   if (current) {
     const target = dashboardForRole(current);
     console.warn('[RoleGuard] Unauthorized. Redirecting to dashboard:', target);

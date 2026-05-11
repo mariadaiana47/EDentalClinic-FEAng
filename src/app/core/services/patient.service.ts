@@ -6,14 +6,12 @@ import { Patient, PatientRegistrationRequest, PatientSearchCriteria } from '../m
 
 @Injectable({ providedIn: 'root' })
 export class PatientService extends BaseApi {
-  /** UC I — Inregistrare pacient (asistent). */
   register(req: PatientRegistrationRequest): Observable<{ message: string; temporaryPassword?: string }> {
     return this.http.post<{ message: string; temporaryPassword?: string }>(
       API_ROUTES.PATIENTS.REGISTER, req,
     );
   }
 
-  /** UC "Cautare dosar pacient" — cautare dupa CNP sau nume. */
   search(criteria: PatientSearchCriteria): Observable<Patient[]> {
     return this.http.get<Patient[]>(API_ROUTES.PATIENTS.SEARCH, { params: { ...criteria } as any });
   }
@@ -30,7 +28,6 @@ export class PatientService extends BaseApi {
     return this.http.get<any>(`${API_ROUTES.PATIENTS.BY_ID(id)}/dental-record`);
   }
 
-  /** Pacient logat — datele sale. */
   me(): Observable<Patient> {
     return this.http.get<Patient>(API_ROUTES.PATIENTS.ME);
   }

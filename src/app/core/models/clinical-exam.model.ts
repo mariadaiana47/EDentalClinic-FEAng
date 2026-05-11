@@ -6,6 +6,6 @@ export interface ClinicalExam {
   toothChart: ToothChart;
   teethExamination?: string;
   mucousExamination?: string;
-  otherFindings?: string; // creste, tuberozitati, bolta palatina etc.
+  otherFindings?: string;
   examinationDate?: string;
 }

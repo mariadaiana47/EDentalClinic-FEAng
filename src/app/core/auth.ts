@@ -15,6 +15,8 @@ export interface ChangePasswordRequest {
 const TOKEN_KEY = 'edc_token';
 const ROLE_KEY = 'edc_role';
 const EMAIL_KEY = 'edc_email';
+const FIRST_NAME_KEY = 'edc_fname';
+const LAST_NAME_KEY = 'edc_lname';
 const TEMP_PWD_KEY = 'edc_temp_pwd';
 
 @Injectable({
@@ -24,15 +26,13 @@ export class Auth {
   private http = inject(HttpClient);
   private api = `${environment.apiUrl}/auth`;
 
-  // signals reactive pentru a observa starea sesiunii in componente
   readonly currentRole = signal<Role | null>(this.readRole());
   readonly currentEmail = signal<string | null>(localStorage.getItem(EMAIL_KEY));
+  readonly firstName = signal<string | null>(localStorage.getItem(FIRST_NAME_KEY));
+  readonly lastName = signal<string | null>(localStorage.getItem(LAST_NAME_KEY));
   readonly mustChangePassword = signal<boolean>(localStorage.getItem(TEMP_PWD_KEY) === 'true');
 
-  /**
-   * Trimite { email, password } catre Spring Boot — corespunde LoginDTO.java.
-   * Persisteaza token-ul, rolul si flag-ul de parola temporara.
-   */
+
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.api}/login`, { email, password }).pipe(
       tap((res) => this.persistSession(email, res)),
@@ -54,11 +54,14 @@ export class Auth {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(ROLE_KEY);
     localStorage.removeItem(EMAIL_KEY);
+    localStorage.removeItem(FIRST_NAME_KEY);
+    localStorage.removeItem(LAST_NAME_KEY);
     localStorage.removeItem(TEMP_PWD_KEY);
-    // chei vechi din versiuni anterioare
     localStorage.removeItem('token');
     this.currentRole.set(null);
     this.currentEmail.set(null);
+    this.firstName.set(null);
+    this.lastName.set(null);
     this.mustChangePassword.set(false);
   }
 
@@ -79,9 +82,13 @@ export class Auth {
     localStorage.setItem(TOKEN_KEY, res.token);
     localStorage.setItem(ROLE_KEY, normalizedRole);
     localStorage.setItem(EMAIL_KEY, email);
+    if (res.firstName) localStorage.setItem(FIRST_NAME_KEY, res.firstName);
+    if (res.lastName) localStorage.setItem(LAST_NAME_KEY, res.lastName);
     localStorage.setItem(TEMP_PWD_KEY, String(res.temporaryPassword));
     this.currentRole.set(normalizedRole);
     this.currentEmail.set(email);
+    this.firstName.set(res.firstName || null);
+    this.lastName.set(res.lastName || null);
     this.mustChangePassword.set(res.temporaryPassword);
   }
 

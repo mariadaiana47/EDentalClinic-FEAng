@@ -19,7 +19,6 @@ export class DoctorService extends BaseApi {
     return this.http.get<Doctor>(API_ROUTES.DOCTORS.ME);
   }
 
-  /** UC XVI / XVII — gestionare radiologi afiliati */
   listAffiliatedRadiologists(): Observable<Radiologist[]> {
     return this.http.get<Radiologist[]>(API_ROUTES.DOCTORS.AFFILIATED_RADIOLOGISTS);
   }

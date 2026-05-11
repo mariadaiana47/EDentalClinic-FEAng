@@ -6,12 +6,10 @@ import { XrayRequest, CreateXrayRequest } from '../models/xray.model';
 
 @Injectable({ providedIn: 'root' })
 export class XrayRequestService extends BaseApi {
-  /** UC VI — Creare cerere radiografie (de catre medic). */
   create(req: CreateXrayRequest): Observable<XrayRequest> {
     return this.http.post<XrayRequest>(API_ROUTES.XRAY_REQUESTS.BASE, req);
   }
 
-  /** Toate cererile (filtrate server-side dupa rolul autenticat). */
   myRequests(): Observable<XrayRequest[]> {
     return this.http.get<XrayRequest[]>(API_ROUTES.XRAY_REQUESTS.MY);
   }
@@ -20,7 +18,6 @@ export class XrayRequestService extends BaseApi {
     return this.http.get<XrayRequest>(API_ROUTES.XRAY_REQUESTS.BY_ID(id));
   }
 
-  /** UC XIX / VII — Pacient selecteaza un radiolog pentru cerere. */
   selectRadiologist(requestId: number, radiologistId: number, scheduledAt?: string): Observable<XrayRequest> {
     return this.http.post<XrayRequest>(
       API_ROUTES.XRAY_REQUESTS.SELECT_RADIOLOGIST(requestId),

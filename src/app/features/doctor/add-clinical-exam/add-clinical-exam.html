@@ -3,7 +3,6 @@
   <p class="page-sub">Completați schema dentară și detaliile clinice ale pacientului.</p>
 </div>
 
-<!-- Step 1: Select patient -->
 <div *ngIf="!selectedPatient()" class="section-card">
   <div class="section-head"><i class="bi bi-search"></i> Pasul 1: Selectați Pacientul</div>
   <div class="section-body">
@@ -11,10 +10,8 @@
   </div>
 </div>
 
-<!-- Step 2: Form -->
 <div *ngIf="selectedPatient()">
 
-  <!-- Patient banner -->
   <div class="patient-banner">
     <div class="banner-left">
       <div class="banner-avatar">{{ selectedPatient()?.lastName?.[0] }}{{ selectedPatient()?.firstName?.[0] }}</div>
@@ -30,7 +27,6 @@
 
   <form (submit)="onSubmit()">
 
-    <!-- Dental Chart -->
     <div class="section-card">
       <div class="section-head"><i class="bi bi-grid-3x3-gap-fill"></i> Schema Dentară</div>
       <div class="section-body">
@@ -39,7 +35,6 @@
       </div>
     </div>
 
-    <!-- History + Teeth -->
     <div class="two-col">
       <div class="section-card">
         <div class="section-head"><i class="bi bi-journal-medical"></i> Istoricul Bolii</div>
@@ -57,7 +52,6 @@
       </div>
     </div>
 
-    <!-- Mucosa -->
     <div class="section-card">
       <div class="section-head"><i class="bi bi-activity"></i> Examen Mucoase</div>
       <div class="section-body">
@@ -66,7 +60,6 @@
       </div>
     </div>
 
-    <!-- Other elements -->
     <div class="section-card">
       <div class="section-head"><i class="bi bi-sliders"></i> Alte Elemente</div>
       <div class="section-body">
@@ -87,7 +80,6 @@
       </div>
     </div>
 
-    <!-- Actions -->
     <div class="form-actions">
       <div *ngIf="success()" class="success-msg">
         <i class="bi bi-check-circle-fill"></i> Examen salvat cu succes!

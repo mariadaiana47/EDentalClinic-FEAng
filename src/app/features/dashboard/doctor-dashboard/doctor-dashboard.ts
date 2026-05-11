@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PatientService } from '../../../core/services/patient.service';
 import { DoctorService } from '../../../core/services/doctor.service';
+import { Auth } from '../../../core/auth';
 
 @Component({
   selector: 'app-doctor-dashboard',
@@ -10,15 +11,13 @@ import { DoctorService } from '../../../core/services/doctor.service';
   imports: [CommonModule, RouterLink],
   template: `
     <div>
-      <!-- Welcome banner -->
       <div class="welcome-banner">
         <div>
-          <h2 class="welcome-title">Bună ziua, Doctor!</h2>
+          <h2 class="welcome-title">{{ greeting() }}, Doctor!</h2>
           <p class="welcome-sub">Gestionați fișele medicale și cererile de radiografie ale pacienților.</p>
         </div>
       </div>
 
-      <!-- Stats grid -->
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
@@ -50,7 +49,6 @@ import { DoctorService } from '../../../core/services/doctor.service';
         </div>
       </div>
 
-      <!-- Quick actions -->
       <div class="section-title">Acțiuni Rapide</div>
       <div class="actions-grid">
         <a routerLink="/doctor/search" class="action-card">
@@ -72,7 +70,6 @@ import { DoctorService } from '../../../core/services/doctor.service';
     </div>
   `,
   styles: [`
-    /* Welcome banner */
     .welcome-banner {
       background: linear-gradient(135deg, #0d3d56 0%, #3cbdd4 100%);
       color: #fff; padding: 1.75rem 2rem; border-radius: 0.75rem; margin-bottom: 1.5rem;
@@ -80,7 +77,6 @@ import { DoctorService } from '../../../core/services/doctor.service';
     .welcome-title { font-size: 1.4rem; font-weight: 700; margin: 0 0 0.375rem; }
     .welcome-sub { margin: 0; opacity: 0.8; font-size: 0.9rem; }
 
-    /* Stats */
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
     .stat-card {
       background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem;
@@ -94,7 +90,6 @@ import { DoctorService } from '../../../core/services/doctor.service';
     .stat-value { font-size: 1.6rem; font-weight: 700; color: #1a202c; line-height: 1; }
     .stat-label { font-size: 0.75rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 0.2rem; }
 
-    /* Quick actions */
     .section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #9ca3af; margin-bottom: 0.875rem; }
     .actions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .action-card {
@@ -133,9 +128,12 @@ import { DoctorService } from '../../../core/services/doctor.service';
 export class DoctorDashboard implements OnInit {
   private patientService = inject(PatientService);
   private doctorService = inject(DoctorService);
+  auth = inject(Auth);
 
   patientCount = signal<number | null>(null);
   radiologistCount = signal<number | null>(null);
+
+  readonly greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Bună seara' : 'Bună ziua');
 
   ngOnInit() {
     this.patientService.list().subscribe(p => this.patientCount.set(p.length));

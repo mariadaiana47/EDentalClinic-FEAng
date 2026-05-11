@@ -4,91 +4,170 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { XRayService, XRayRequest } from '../../../core/services/xray.service';
 import { API_ROUTES } from '../../../core/constants/api-routes';
+import { Auth } from '../../../core/auth';
 
 @Component({
   selector: 'app-radiologist-dashboard',
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div>
-      <div class="mb-4">
-        <h2 class="fw-bold text-dark">Cereri de Radiografie</h2>
-        <p class="text-muted">Vizualizați cererile primite și încărcați rezultatele radiografiilor.</p>
+    <div class="welcome-banner">
+      <h2 class="wb-name">{{ greeting() }}, Radiolog!</h2>
+      <p class="wb-sub">Gestionați cererile de investigații și încărcați rezultatele radiografice către medici.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="bi bi-inbox-fill"></i></div>
+        <div class="stat-info">
+          <span class="stat-label">Cereri în Așteptare</span>
+          <span class="stat-val">{{ pendingRequests().length }}</span>
+        </div>
       </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="bi bi-check-circle-fill" style="color: #10b981;"></i></div>
+        <div class="stat-info">
+          <span class="stat-label">Cereri Finalizate</span>
+          <span class="stat-val">{{ completedCount() }}</span>
+        </div>
+      </div>
+    </div>
 
-      <div class="row g-3">
-        <div class="col-md-6" *ngFor="let req of pendingRequests()">
-          <div class="card req-card">
-            <div class="card-header d-flex justify-content-between align-items-center req-header">
-              <span class="badge-type">{{ req.type }}</span>
-              <span class="text-muted small">{{ req.createdAt | date:'dd/MM/yyyy' }}</span>
-            </div>
-            <div class="card-body">
-              <h6 class="fw-bold mb-1">Dinți vizați: {{ req.teethInvolved }}</h6>
-              <p class="text-muted small mb-3">{{ req.details || 'Fără specificații suplimentare.' }}</p>
-
-              <div class="upload-area">
-                <label class="file-label w-100 mb-2">
-                  <i class="bi bi-cloud-upload me-2"></i>
-                  {{ selectedFiles[req.id!] ? selectedFiles[req.id!].name : 'Alegeți fișierul radiografiei' }}
-                  <input type="file" (change)="onFileSelected($event, req.id!)" hidden accept="image/*">
-                </label>
-                <button class="btn btn-clinic w-100"
-                  [disabled]="!selectedFiles[req.id!] || uploadingId() === req.id"
-                  (click)="uploadXRay(req.id!)">
-                  <span *ngIf="uploadingId() !== req.id">
-                    <i class="bi bi-check-circle me-1"></i>Finalizează și Încarcă
-                  </span>
-                  <span *ngIf="uploadingId() === req.id">
-                    <span class="spinner-border spinner-border-sm me-2"></span>Se încarcă...
-                  </span>
-                </button>
+    <div class="section-card">
+      <div class="section-head">
+        <i class="bi bi-journal-text"></i> Cereri de Investigat
+      </div>
+      <div class="section-body">
+        <div *ngFor="let req of pendingRequests()" class="req-item">
+          <div class="req-main">
+            <div class="req-user">
+              <div class="user-avatar">{{ req.patient?.lastName?.[0] }}{{ req.patient?.firstName?.[0] }}</div>
+              <div>
+                <div class="user-name">{{ req.patient?.lastName }} {{ req.patient?.firstName }}</div>
+                <div class="user-sub">CNP: {{ req.patient?.cnp }}</div>
               </div>
+            </div>
+
+            <div class="req-details">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge-type">{{ req.type }}</span>
+                <span class="teeth-info">Dinți: {{ req.teethInvolved }}</span>
+              </div>
+              <div class="doctor-info">
+                Trimitere: Dr. {{ req.doctor?.lastName || 'Medic' }} {{ req.doctor?.firstName || '' }}
+              </div>
+            </div>
+
+            <div class="req-date">
+              <i class="bi bi-calendar3"></i>
+              {{ req.createdAt | date:'dd/MM/yyyy' }}
+            </div>
+          </div>
+
+          <div class="upload-section">
+            <div class="upload-container">
+              <label class="file-drop">
+                <i class="bi bi-cloud-upload"></i>
+                <span>{{ selectedFiles[req.id!] ? selectedFiles[req.id!].name : 'Selectați imaginea radiografiei...' }}</span>
+                <input type="file" (change)="onFileSelected($event, req.id!)" hidden accept="image/*">
+              </label>
+              <button class="btn-confirm" 
+                      [disabled]="!selectedFiles[req.id!] || uploadingId() === req.id"
+                      (click)="uploadXRay(req.id!)">
+                <span *ngIf="uploadingId() !== req.id"><i class="bi bi-check-lg"></i> Finalizează</span>
+                <span *ngIf="uploadingId() === req.id" class="spinner-border spinner-border-sm"></span>
+              </button>
+            </div>
+            <div *ngIf="req.details" class="req-note">
+              <i class="bi bi-info-circle"></i> Observații medic: {{ req.details }}
             </div>
           </div>
         </div>
 
-        <div *ngIf="pendingRequests().length === 0" class="col-12">
-          <div class="empty-state text-center py-5">
-            <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
-            <p class="text-muted">Nu există cereri de radiografie în așteptare.</p>
-          </div>
+        <div *ngIf="pendingRequests().length === 0" class="empty-state">
+          <i class="bi bi-inbox"></i>
+          <p>Nu există cereri de radiografie în așteptare.</p>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .req-card { border-left: 4px solid #3cbdd4; }
-    .req-header { background: #f7fdfe; border-bottom: 1px solid #d9f2f7; padding: 0.75rem 1.25rem; }
-    .badge-type { background: #e0f6fa; color: #0e7490; font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 0.375rem; }
-    .file-label {
-      display: block; padding: 0.6rem 1rem; border: 2px dashed #d9f2f7;
-      border-radius: 0.5rem; text-align: center; cursor: pointer;
-      font-size: 0.875rem; color: #6b7280; transition: all 0.15s;
-    }
-    .file-label:hover { border-color: #3cbdd4; background: #f0fbfd; color: #3cbdd4; }
-    .btn-clinic { background: #3cbdd4; border: none; color: #fff; font-weight: 600; }
-    .btn-clinic:hover:not(:disabled) { background: #2aa8bf; color: #fff; }
-    .btn-clinic:disabled { background: #a8dfe9; }
-    .empty-state { background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 0.5rem; }
+    .welcome-banner { background: linear-gradient(135deg, #0d3d56 0%, #3cbdd4 100%); color: #fff; padding: 1.75rem 2rem; border-radius: 0.75rem; margin-bottom: 1.5rem; }
+    .wb-name { font-size: 1.4rem; font-weight: 700; margin: 0 0 0.25rem; color: #fff; }
+    .wb-sub { margin: 0; opacity: 0.85; font-size: 0.9rem; color: #fff; }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .stat-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; }
+    .stat-icon { width: 42px; height: 42px; border-radius: 0.5rem; background: #f0fbfd; color: #3cbdd4; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+    .stat-info { display: flex; flex-direction: column; }
+    .stat-label { font-size: 0.75rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-val { font-size: 1.25rem; font-weight: 700; color: #1a202c; }
+
+    .section-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; }
+    .section-head { background: #f7fdfe; border-bottom: 1px solid #d9f2f7; padding: 0.875rem 1.25rem; font-weight: 600; color: #1a202c; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+    .section-head i { color: #3cbdd4; }
+    .section-body { padding: 1.25rem; }
+
+    .req-item { border-bottom: 1px solid #f3f4f6; padding-bottom: 1.5rem; margin-bottom: 1.5rem; }
+    .req-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+
+    .req-main { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
+    
+    .req-user { display: flex; align-items: center; gap: 0.75rem; }
+    .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #3cbdd4, #2891a8); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+    .user-name { font-weight: 600; color: #1a202c; font-size: 0.95rem; }
+    .user-sub { font-size: 0.8rem; color: #6b7280; }
+
+    .req-details { flex: 1; min-width: 200px; }
+    .badge-type { background: #f0fbfd; color: #3cbdd4; font-size: 0.75rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 0.375rem; text-transform: uppercase; }
+    .teeth-info { font-size: 0.85rem; font-weight: 600; color: #374151; }
+    .doctor-info { font-size: 0.8rem; color: #6b7280; margin-top: 0.2rem; }
+
+    .req-date { font-size: 0.8rem; color: #9ca3af; display: flex; align-items: center; gap: 0.4rem; }
+
+    .upload-section { background: #f9fafb; border-radius: 0.6rem; padding: 1rem; border: 1px solid #f1f5f9; }
+    .upload-container { display: flex; gap: 0.75rem; align-items: center; }
+    
+    .file-drop { flex: 1; display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 1rem; background: #fff; border: 1px dashed #d1d5db; border-radius: 0.5rem; cursor: pointer; transition: all 0.15s; }
+    .file-drop:hover { border-color: #3cbdd4; background: #f0fbfd; }
+    .file-drop i { color: #3cbdd4; font-size: 1.1rem; }
+    .file-drop span { font-size: 0.85rem; color: #6b7280; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .btn-confirm { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.25rem; background: #3cbdd4; color: #fff; border: none; border-radius: 0.5rem; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: background 0.15s; }
+    .btn-confirm:hover:not(:disabled) { background: #2aa8bf; }
+    .btn-confirm:disabled { background: #a8dfe9; cursor: not-allowed; }
+
+    .req-note { font-size: 0.8rem; color: #6b7280; font-style: italic; margin-top: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
+
+    .empty-state { text-align: center; padding: 3rem; color: #9ca3af; }
+    .empty-state i { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
   `]
 })
 export class RadiologistDashboard implements OnInit {
   private http = inject(HttpClient);
   private xrayService = inject(XRayService);
+  auth = inject(Auth);
 
-  pendingRequests = signal<XRayRequest[]>([]);
+  pendingRequests = signal<any[]>([]);
+  completedCount = signal<number>(0);
   uploadingId = signal<number | null>(null);
   selectedFiles: { [key: number]: File } = {};
+
+  readonly greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Bună seara' : 'Bună ziua');
 
   ngOnInit() {
     this.loadRequests();
   }
 
   loadRequests() {
-    this.http.get<XRayRequest[]>(`${API_ROUTES.XRAY_REQUESTS.BASE}/all-pending`).subscribe({
+    this.http.get<any[]>(`${API_ROUTES.XRAY_REQUESTS.BASE}/all-pending`).subscribe({
       next: data => this.pendingRequests.set(data),
       error: err => console.error('Error fetching pending requests:', err)
+    });
+
+    this.http.get<any[]>(`${API_ROUTES.XRAY_REQUESTS.BASE}/all-completed`).subscribe({
+      next: data => this.completedCount.set(data.length),
+      error: err => console.error('Error fetching completed requests:', err)
     });
   }
 
