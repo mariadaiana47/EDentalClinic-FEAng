@@ -34,6 +34,16 @@ export class PatientRegistration {
     previousTreatments: ''
   };
 
+  onBirthDateChange() {
+    if (!this.form.birthDate) return;
+    const today = new Date();
+    const birth = new Date(this.form.birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+    this.form.age = age >= 0 ? age : undefined;
+  }
+
   onSubmit() {
     this.error.set(null);
     this.success.set(null);

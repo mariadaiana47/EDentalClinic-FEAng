@@ -9,49 +9,58 @@ import { Patient } from '../../../core/models/patient.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="search-container">
-      <div class="search-box">
-        <input 
-          type="text" 
-          [(ngModel)]="query" 
-          (keyup.enter)="onSearch()"
-          placeholder="Caută pacient după Nume sau CNP..."
-          class="search-input"
-        >
-        <button (click)="onSearch()" class="search-btn" [disabled]="loading()">
-          <span *ngIf="!loading()">🔍 Caută</span>
-          <span *ngIf="loading()">...</span>
+    <div>
+      <div class="input-group mb-3">
+        <span class="input-group-text bg-white border-end-0">
+          <i class="bi bi-search text-muted"></i>
+        </span>
+        <input type="text" class="form-control border-start-0 ps-0"
+          [(ngModel)]="query" (keyup.enter)="onSearch()"
+          placeholder="Caută pacient după Nume sau CNP...">
+        <button class="btn btn-clinic px-4" (click)="onSearch()" [disabled]="loading()">
+          <span *ngIf="!loading()">Caută</span>
+          <span *ngIf="loading()"><span class="spinner-border spinner-border-sm"></span></span>
         </button>
       </div>
 
       <div *ngIf="patients().length > 0" class="results-list">
-        <div *ngFor="let p of patients()" class="patient-card" (click)="select(p)">
-          <div class="info">
-            <strong>{{ p.lastName }} {{ p.firstName }}</strong>
-            <small>CNP: {{ p.cnp }}</small>
+        <div *ngFor="let p of patients()" class="result-item d-flex justify-content-between align-items-center"
+          (click)="select(p)">
+          <div class="d-flex align-items-center gap-3">
+            <div class="res-avatar">{{ p.lastName[0] }}{{ p.firstName[0] }}</div>
+            <div>
+              <div class="fw-semibold">{{ p.lastName }} {{ p.firstName }}</div>
+              <div class="text-muted small">CNP: {{ p.cnp }}</div>
+            </div>
           </div>
-          <button class="btn-select">Selectează</button>
+          <button class="btn btn-sm btn-outline-clinic">Selectează</button>
         </div>
       </div>
 
-      <div *ngIf="hasSearched() && patients().length === 0 && !loading()" class="no-results">
+      <div *ngIf="hasSearched() && patients().length === 0 && !loading()"
+        class="text-center text-muted fst-italic py-3">
         Niciun pacient găsit pentru "{{ query }}".
       </div>
     </div>
   `,
   styles: [`
-    .search-container { margin-bottom: 2rem; }
-    .search-box { display: flex; gap: 0.5rem; background: white; padding: 0.5rem; border-radius: 0.75rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .search-input { flex: 1; border: none; padding: 0.75rem; font-size: 1rem; outline: none; }
-    .search-btn { background: #3b82f6; color: white; border: none; padding: 0 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; }
-    .results-list { margin-top: 1rem; display: grid; gap: 0.75rem; }
-    .patient-card { background: white; padding: 1rem; border-radius: 0.75rem; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: transform 0.2s; border: 1px solid #f1f5f9; }
-    .patient-card:hover { transform: translateY(-2px); border-color: #3b82f6; }
-    .info { display: flex; flex-direction: column; }
-    .info strong { color: #1e293b; }
-    .info small { color: #64748b; }
-    .btn-select { background: #f1f5f9; border: none; padding: 0.5rem 1rem; border-radius: 0.4rem; font-size: 0.875rem; font-weight: 600; color: #3b82f6; }
-    .no-results { margin-top: 1rem; color: #64748b; text-align: center; font-style: italic; }
+    .btn-clinic { background: #3cbdd4; border: none; color: #fff; font-weight: 600; }
+    .btn-clinic:hover:not(:disabled) { background: #2aa8bf; color: #fff; }
+    .btn-outline-clinic { color: #3cbdd4; border-color: #3cbdd4; font-weight: 600; }
+    .btn-outline-clinic:hover { background: #3cbdd4; color: #fff; }
+    .results-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .result-item {
+      padding: 0.875rem 1rem; background: #f7fdfe;
+      border: 1px solid #d9f2f7; border-radius: 0.5rem;
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .result-item:hover { border-color: #3cbdd4; }
+    .res-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, #3cbdd4, #2891a8);
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: 700; flex-shrink: 0;
+    }
   `]
 })
 export class PatientSearch {

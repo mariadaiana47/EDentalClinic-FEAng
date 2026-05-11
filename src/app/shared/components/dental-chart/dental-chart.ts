@@ -12,6 +12,7 @@ export interface ToothCondition {
   standalone: true,
   imports: [CommonModule],
   template: `
+    <div class="dental-chart-wrapper">
     <div class="dental-chart">
       <div class="jaw upper">
         <div *ngFor="let t of upperTeeth" 
@@ -39,22 +40,26 @@ export interface ToothCondition {
         Dinți selectați: <strong>{{ selectedTeeth().join(', ') }}</strong>
       </div>
     </div>
+    </div>
   `,
   styles: [`
-    .dental-chart { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 1.5rem; background: #f8fafc; border-radius: 1rem; }
-    .jaw { display: flex; gap: 0.5rem; justify-content: center; }
-    .tooth { 
-      width: 40px; height: 60px; 
-      border: 1px solid #cbd5e1; border-radius: 0.25rem;
+    .dental-chart-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .dental-chart { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1.25rem; background: #f8fafc; border-radius: 0.75rem; min-width: 640px; }
+    .jaw { display: flex; gap: 0.375rem; justify-content: center; }
+    .tooth {
+      width: 38px; height: 56px;
+      border: 1.5px solid #d1d5db; border-radius: 0.3rem;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: white; cursor: pointer; transition: all 0.2s;
+      background: #fff; cursor: pointer; transition: all 0.15s; gap: 2px;
     }
-    .tooth:hover { border-color: #3b82f6; background: #eff6ff; }
-    .tooth.selected { background: #3b82f6; border-color: #2563eb; color: white; }
-    .tooth-label { font-size: 0.75rem; font-weight: bold; }
-    .tooth-icon { font-size: 1.25rem; }
-    .divider { width: 100%; height: 2px; background: #e2e880; opacity: 0.5; margin: 0.5rem 0; }
-    .selection-info { margin-top: 1rem; font-size: 0.875rem; color: #475569; }
+    .tooth:hover { border-color: #3cbdd4; background: #f0fbfd; }
+    .tooth.selected { background: #3cbdd4; border-color: #2aa8bf; }
+    .tooth.selected .tooth-label { color: #fff; }
+    .tooth-label { font-size: 0.68rem; font-weight: 700; color: #374151; }
+    .tooth-icon { font-size: 1.2rem; }
+    .divider { width: 100%; height: 2px; background: linear-gradient(90deg, transparent, #3cbdd4, transparent); margin: 0.25rem 0; }
+    .selection-info { font-size: 0.82rem; color: #6b7280; }
+    .selection-info strong { color: #3cbdd4; }
   `]
 })
 export class DentalChart {
