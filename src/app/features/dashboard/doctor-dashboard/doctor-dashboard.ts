@@ -44,7 +44,7 @@ import { Auth } from '../../../core/auth';
           <div class="stat-icon"><i class="bi bi-image-fill"></i></div>
           <div class="stat-body">
             <div class="stat-value">—</div>
-            <div class="stat-label">Radiografii Pendinte</div>
+            <div class="stat-label">Radiografii în așteptare</div>
           </div>
         </div>
       </div>

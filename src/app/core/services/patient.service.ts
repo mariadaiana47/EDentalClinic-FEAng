@@ -6,10 +6,8 @@ import { Patient, PatientRegistrationRequest, PatientSearchCriteria } from '../m
 
 @Injectable({ providedIn: 'root' })
 export class PatientService extends BaseApi {
-  register(req: PatientRegistrationRequest): Observable<{ message: string; temporaryPassword?: string }> {
-    return this.http.post<{ message: string; temporaryPassword?: string }>(
-      API_ROUTES.PATIENTS.REGISTER, req,
-    );
+  register(req: PatientRegistrationRequest): Observable<string> {
+    return this.http.post(API_ROUTES.PATIENTS.REGISTER, req, { responseType: 'text' });
   }
 
   search(criteria: PatientSearchCriteria): Observable<Patient[]> {

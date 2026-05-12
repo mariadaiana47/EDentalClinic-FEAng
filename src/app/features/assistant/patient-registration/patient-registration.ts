@@ -56,12 +56,9 @@ export class PatientRegistration {
 
     this.loading.set(true);
     this.patientService.register(this.form).subscribe({
-      next: (res) => {
+      next: () => {
         this.loading.set(false);
-        this.success.set('Pacientul a fost inregistrat cu succes!');
-        if (res.temporaryPassword) {
-          this.tempPassword.set(res.temporaryPassword);
-        }
+        this.success.set('Pacientul a fost inregistrat cu succes! Credentialele au fost trimise pe email.');
         this.resetForm();
       },
       error: (err) => {

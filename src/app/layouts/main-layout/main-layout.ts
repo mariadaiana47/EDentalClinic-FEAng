@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { Auth } from '../../core/auth';
 import { CommonModule } from '@angular/common';
@@ -21,6 +21,8 @@ export class MainLayout {
   readonly profilePicture = this.auth.profilePicture;
 
   readonly firstName = computed(() => this.email()?.split('@')[0] ?? '');
+
+  sidebarOpen = signal(false);
 
   readonly roleLabel = computed(() => {
     switch (this.role()) {

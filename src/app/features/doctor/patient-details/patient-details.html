@@ -31,11 +31,11 @@
       <button class="close-btn" (click)="showXrayForm.set(false)"><i class="bi bi-x-lg"></i></button>
     </div>
     <div class="panel-body">
-      <div class="form-row-3">
-        <div class="field">
-          <label>Dinti vizati</label>
-          <input type="text" [(ngModel)]="newXray.teethInvolved" placeholder="ex: 11, 21">
-        </div>
+      <div class="field">
+        <label>Dinti vizati</label>
+        <app-dental-chart (selectionChange)="onTeethChange($event)"></app-dental-chart>
+      </div>
+      <div class="xray-controls-row mt-s">
         <div class="field">
           <label>Tip Radiografie</label>
           <select [(ngModel)]="newXray.type">
@@ -45,7 +45,6 @@
           </select>
         </div>
         <div class="field field-btn">
-          <label>&nbsp;</label>
           <button class="btn-primary-teal w-full" (click)="saveXrayRequest()">
             <i class="bi bi-send-fill"></i> Trimite Cererea
           </button>

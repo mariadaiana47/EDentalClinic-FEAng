@@ -2,7 +2,6 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { XRayService, XRayRequest } from '../../../core/services/xray.service';
 import { API_ROUTES } from '../../../core/constants/api-routes';
 import { Auth } from '../../../core/auth';
 
@@ -28,7 +27,7 @@ import { Auth } from '../../../core/auth';
         <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
         <div class="stat-info">
           <span class="stat-label">Cereri Finalizate</span>
-          <span class="stat-val">{{ completedCount() }}</span>
+          <span class="stat-val">{{ completedRequests().length }}</span>
         </div>
       </div>
     </div>
@@ -71,7 +70,7 @@ import { Auth } from '../../../core/auth';
                 <span>{{ selectedFiles[req.id!] ? selectedFiles[req.id!].name : 'Selectati imaginea radiografiei...' }}</span>
                 <input type="file" (change)="onFileSelected($event, req.id!)" hidden accept="image/*">
               </label>
-              <button class="btn-confirm" 
+              <button class="btn-confirm"
                       [disabled]="!selectedFiles[req.id!] || uploadingId() === req.id"
                       (click)="uploadXRay(req.id!)">
                 <span *ngIf="uploadingId() !== req.id"><i class="bi bi-check-lg"></i> Finalizeaza</span>
@@ -90,6 +89,45 @@ import { Auth } from '../../../core/auth';
         </div>
       </div>
     </div>
+
+    <div class="section-card mt-card">
+      <div class="section-head" (click)="showHistory.set(!showHistory())" style="cursor:pointer">
+        <span><i class="bi bi-clock-history"></i> Istoric Radiografii</span>
+        <span class="history-count">{{ completedRequests().length }} finalizate</span>
+        <i class="bi" [class.bi-chevron-down]="!showHistory()" [class.bi-chevron-up]="showHistory()"></i>
+      </div>
+      <div class="section-body" *ngIf="showHistory()">
+        <div *ngFor="let req of completedRequests()" class="hist-item">
+          <div class="hist-avatar">{{ req.patient?.lastName?.[0] }}{{ req.patient?.firstName?.[0] }}</div>
+
+          <div class="hist-main">
+            <div class="hist-top">
+              <span class="hist-name">{{ req.patient?.lastName }} {{ req.patient?.firstName }}</span>
+              <span class="badge-done">{{ req.type }}</span>
+            </div>
+            <div class="hist-bottom">
+              <span class="hist-chip"><i class="bi bi-tooth"></i> Dinti: {{ req.teethInvolved }}</span>
+              <span *ngIf="req.doctor?.lastName" class="hist-chip">
+                <i class="bi bi-person"></i> Dr. {{ req.doctor?.lastName }} {{ req.doctor?.firstName }}
+              </span>
+              <span *ngIf="req.details" class="hist-chip hist-note">
+                <i class="bi bi-chat-left-text"></i> {{ req.details }}
+              </span>
+            </div>
+          </div>
+
+          <div class="hist-date">
+            <div class="date-day">{{ req.createdAt | date:'dd MMM' }}</div>
+            <div class="date-year">{{ req.createdAt | date:'yyyy' }}</div>
+          </div>
+        </div>
+
+        <div *ngIf="completedRequests().length === 0" class="empty-state">
+          <i class="bi bi-clock-history"></i>
+          <p>Nicio radiografie finalizata inca.</p>
+        </div>
+      </div>
+    </div>
   `,
   styles: [`
     .welcome-banner { background: linear-gradient(135deg, #0d3d56 0%, #3cbdd4 100%); color: #fff; padding: 1.75rem 2rem; border-radius: 0.75rem; margin-bottom: 1.5rem; }
@@ -104,7 +142,8 @@ import { Auth } from '../../../core/auth';
     .stat-val { font-size: 1.25rem; font-weight: 700; color: #1a202c; }
 
     .section-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; }
-    .section-head { background: #f7fdfe; border-bottom: 1px solid #d9f2f7; padding: 0.875rem 1.25rem; font-weight: 600; color: #1a202c; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+    .section-head { background: #f7fdfe; border-bottom: 1px solid #d9f2f7; padding: 0.875rem 1.25rem; font-weight: 600; color: #1a202c; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; justify-content: flex-start; }
+    .section-head .history-count { margin-left: auto; margin-right: 0; }
     .section-head i { color: #3cbdd4; }
     .section-body { padding: 1.25rem; }
 
@@ -141,15 +180,57 @@ import { Auth } from '../../../core/auth';
 
     .empty-state { text-align: center; padding: 3rem; color: #9ca3af; }
     .empty-state i { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+
+    .mt-card { margin-top: 1.25rem; }
+    .history-count { font-size: 0.78rem; font-weight: 600; color: #9ca3af; margin-left: auto; margin-right: 0.5rem; }
+
+    .hist-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.875rem 0; border-bottom: 1px solid #f3f4f6;
+    }
+    .hist-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .hist-avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+      color: #0891b2; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.82rem; letter-spacing: 0.02em;
+    }
+
+    .hist-main { flex: 1; min-width: 0; }
+    .hist-top {
+      display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.35rem;
+    }
+    .hist-name { font-weight: 600; color: #1a202c; font-size: 0.9rem; }
+    .badge-done {
+      background: #f0fbfd; color: #0891b2; border: 1px solid #d9f2f7;
+      font-size: 0.68rem; font-weight: 700; padding: 0.15rem 0.55rem;
+      border-radius: 0.35rem; text-transform: uppercase; letter-spacing: 0.03em;
+      flex-shrink: 0; white-space: nowrap;
+    }
+
+    .hist-bottom { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .hist-chip {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.78rem; color: #6b7280;
+      background: #f9fafb; border: 1px solid #f1f5f9;
+      padding: 0.15rem 0.55rem; border-radius: 0.35rem;
+    }
+    .hist-chip i { color: #9ca3af; font-size: 0.72rem; }
+    .hist-note { font-style: italic; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .hist-date { text-align: right; flex-shrink: 0; }
+    .date-day { font-size: 0.85rem; font-weight: 600; color: #374151; }
+    .date-year { font-size: 0.72rem; color: #9ca3af; }
   `]
 })
 export class RadiologistDashboard implements OnInit {
   private http = inject(HttpClient);
-  private xrayService = inject(XRayService);
   auth = inject(Auth);
 
   pendingRequests = signal<any[]>([]);
-  completedCount = signal<number>(0);
+  completedRequests = signal<any[]>([]);
+  showHistory = signal(false);
   uploadingId = signal<number | null>(null);
   selectedFiles: { [key: number]: File } = {};
 
@@ -166,7 +247,7 @@ export class RadiologistDashboard implements OnInit {
     });
 
     this.http.get<any[]>(`${API_ROUTES.XRAY_REQUESTS.BASE}/all-completed`).subscribe({
-      next: data => this.completedCount.set(data.length),
+      next: data => this.completedRequests.set(data),
       error: err => console.error('Error fetching completed requests:', err)
     });
   }

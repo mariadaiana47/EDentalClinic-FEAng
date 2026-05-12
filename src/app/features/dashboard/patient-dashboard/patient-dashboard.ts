@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { PatientService } from '../../../core/services/patient.service';
-import { XRayService, XRayRequest } from '../../../core/services/xray.service';
+import { XRayService } from '../../../core/services/xray.service';
 import { TreatmentService } from '../../../core/services/treatment.service';
 import { ClinicalExamService } from '../../../core/services/clinical-exam.service';
 import { API_ROUTES } from '../../../core/constants/api-routes';
@@ -137,7 +137,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
 
     .section-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1.25rem; }
     .section-card:last-child { margin-bottom: 0; }
-    .section-head { background: #f7fdfe; border-bottom: 1px solid #d9f2f7; padding: 0.875rem 1.25rem; font-weight: 600; color: #1a202c; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+    .section-head { background: #f7fdfe; border-bottom: 1px solid #d9f2f7; padding: 0.875rem 1.25rem; font-weight: 600; color: #1a202c; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; justify-content: flex-start; }
     .section-head i { color: #3cbdd4; }
     .section-body { padding: 1.25rem; }
 

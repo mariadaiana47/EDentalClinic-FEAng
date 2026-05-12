@@ -10,11 +10,12 @@ import { Patient } from '../../../core/models/patient.model';
 import { HttpClient } from '@angular/common/http';
 import { Auth } from '../../../core/auth';
 import { environment } from '../../../../environments/environment';
+import { DentalChart } from '../../../shared/components/dental-chart/dental-chart';
 
 @Component({
   selector: 'app-patient-details',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, DentalChart],
   templateUrl: './patient-details.html',
   styleUrls: ['./patient-details.css']
 })
@@ -69,6 +70,10 @@ export class PatientDetails implements OnInit {
       this.isAssigned.set(true);
       alert('Pacient preluat cu succes!');
     });
+  }
+
+  onTeethChange(teeth: number[]) {
+    this.newXray.teethInvolved = teeth.join(', ');
   }
 
   saveXrayRequest() {

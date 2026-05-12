@@ -1,7 +1,9 @@
 <div class="shell">
   <div class="app-wrapper">
 
-    <aside class="sidebar">
+    <div class="sidebar-overlay" [class.visible]="sidebarOpen()" (click)="sidebarOpen.set(false)"></div>
+
+    <aside class="sidebar" [class.open]="sidebarOpen()">
       <div class="sidebar-brand">
         <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
           <path
@@ -81,6 +83,9 @@
 
     <div class="main-col">
       <header class="top-header">
+        <button class="menu-btn" (click)="sidebarOpen.set(!sidebarOpen())">
+          <i class="bi bi-list"></i>
+        </button>
       </header>
 
       <div class="content-area">

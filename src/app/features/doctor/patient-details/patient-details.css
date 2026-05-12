@@ -155,6 +155,20 @@
   gap: 0.875rem;
 }
 
+.xray-controls-row {
+  display: flex;
+  gap: 0.875rem;
+  align-items: flex-end;
+}
+
+.xray-controls-row .field:first-child {
+  flex: 0 0 200px;
+}
+
+.xray-controls-row .field-btn {
+  flex: 1 1 auto;
+}
+
 .mt-s {
   margin-top: 0.75rem;
 }
@@ -227,7 +241,13 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  justify-content: space-between;
+  justify-content: flex-start;
+}
+
+.section-head > button,
+.section-head > .btn-outline-teal,
+.section-head > .btn-primary-teal {
+  margin-left: auto;
 }
 
 .section-head i {
@@ -559,4 +579,39 @@
 .loading-state p {
   color: #6b7280;
   margin-top: 0.875rem;
+}
+
+@media (max-width: 900px) {
+  .pt-grid {
+    grid-template-columns: 1fr;
+  }
+  .exam-grid {
+    grid-template-columns: 1fr;
+  }
+  .pt-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-row-3 {
+    grid-template-columns: 1fr;
+  }
+  .xray-controls-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .xray-controls-row .field:first-child {
+    flex: unset;
+  }
+  .panel-body {
+    padding: 0.875rem;
+  }
+  .pt-header {
+    padding: 1rem;
+  }
+  .section-body {
+    padding: 0.875rem;
+  }
 }
