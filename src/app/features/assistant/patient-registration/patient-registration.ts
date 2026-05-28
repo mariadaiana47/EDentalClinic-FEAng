@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PatientService } from '../../../core/services/patient.service';
@@ -13,8 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./patient-registration.css']
 })
 export class PatientRegistration {
-  private patientService = inject(PatientService);
-  private router = inject(Router);
+  constructor(private patientService: PatientService, private router: Router) {}
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);

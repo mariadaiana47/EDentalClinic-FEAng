@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Auth } from '../../core/auth';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,11 +14,10 @@ import { Role } from '../../core/models/auth-response.model';
   styleUrls: ['./login.css'],
 })
 export class Login {
-  private authService = inject(Auth);
-  private router = inject(Router);
-
   email = '';
   password = '';
+
+  constructor(private authService: Auth, private router: Router) {}
 
   readonly loading = signal(false);
   readonly errorMessage = signal<string | null>(null);

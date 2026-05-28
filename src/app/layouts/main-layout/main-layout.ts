@@ -1,4 +1,4 @@
-import { Component, inject, computed, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { Auth } from '../../core/auth';
 import { CommonModule } from '@angular/common';
@@ -13,26 +13,29 @@ import { ToastComponent } from '../../shared/components/toast/toast.component';
   styleUrls: ['./main-layout.css']
 })
 export class MainLayout {
-  private auth = inject(Auth);
-  private router = inject(Router);
-
-  readonly role = this.auth.currentRole;
-  readonly email = this.auth.currentEmail;
-  readonly profilePicture = this.auth.profilePicture;
-
-  readonly firstName = computed(() => this.email()?.split('@')[0] ?? '');
-
   sidebarOpen = signal(false);
 
-  readonly roleLabel = computed(() => {
-    switch (this.role()) {
-      case 'DOCTOR': return 'Portal Medic Stomatolog';
-      case 'PATIENT': return 'Dosarul Meu Medical';
-      case 'ASSISTANT': return 'Portal Asistent';
-      case 'RADIOLOGIST': return 'Portal Radiolog';
-      default: return 'EDentalClinic';
-    }
-  });
+  role: any;
+  email: any;
+  profilePicture: any;
+  firstName: any;
+  roleLabel: any;
+
+  constructor(private auth: Auth, private router: Router) {
+    this.role = auth.currentRole;
+    this.email = auth.currentEmail;
+    this.profilePicture = auth.profilePicture;
+    this.firstName = computed(() => this.email()?.split('@')[0] ?? '');
+    this.roleLabel = computed(() => {
+      switch (this.role()) {
+        case 'DOCTOR': return 'Portal Medic Stomatolog';
+        case 'PATIENT': return 'Dosarul Meu Medical';
+        case 'ASSISTANT': return 'Portal Asistent';
+        case 'RADIOLOGIST': return 'Portal Radiolog';
+        default: return 'EDentalClinic';
+      }
+    });
+  }
 
   logout() {
     this.auth.logout();

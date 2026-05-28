@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseApi } from './base-api';
 import { API_ROUTES } from '../constants/api-routes';
@@ -6,6 +7,10 @@ import { Patient, PatientRegistrationRequest, PatientSearchCriteria } from '../m
 
 @Injectable({ providedIn: 'root' })
 export class PatientService extends BaseApi {
+  constructor(http: HttpClient) {
+    super(http);
+  }
+
   register(req: PatientRegistrationRequest): Observable<string> {
     return this.http.post(API_ROUTES.PATIENTS.REGISTER, req, { responseType: 'text' });
   }

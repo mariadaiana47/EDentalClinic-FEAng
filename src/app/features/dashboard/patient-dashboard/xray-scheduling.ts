@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -91,7 +91,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
   `]
 })
 export class XRayScheduling implements OnInit {
-  private http = inject(HttpClient);
+  constructor(private http: HttpClient) {}
 
   pendingRequests = signal<any[]>([]);
   affiliatedRadiologists = signal<any[]>([]);

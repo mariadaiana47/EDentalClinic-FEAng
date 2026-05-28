@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -225,16 +225,14 @@ import { Auth } from '../../../core/auth';
   `]
 })
 export class RadiologistDashboard implements OnInit {
-  private http = inject(HttpClient);
-  auth = inject(Auth);
-
   pendingRequests = signal<any[]>([]);
   completedRequests = signal<any[]>([]);
   showHistory = signal(false);
   uploadingId = signal<number | null>(null);
   selectedFiles: { [key: number]: File } = {};
+  greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Buna seara' : 'Buna ziua');
 
-  readonly greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Buna seara' : 'Buna ziua');
+  constructor(private http: HttpClient, public auth: Auth) {}
 
   ngOnInit() {
     this.loadRequests();

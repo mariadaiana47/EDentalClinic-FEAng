@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ROUTES } from '../constants/api-routes';
@@ -14,11 +14,9 @@ export interface ClinicalExamRequest {
   diseaseHistory?: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ClinicalExamService {
-  private http = inject(HttpClient);
+  constructor(private http: HttpClient) {}
 
   save(patientId: number, request: ClinicalExamRequest): Observable<any> {
     return this.http.post(API_ROUTES.CLINICAL_EXAMS.BASE(patientId), request);

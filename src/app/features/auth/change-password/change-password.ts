@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Auth } from '../../../core/auth';
@@ -81,13 +81,12 @@ import { Router } from '@angular/router';
   `]
 })
 export class ChangePassword {
-  private auth = inject(Auth);
-  private router = inject(Router);
-
   currentPassword = '';
   newPassword = '';
   confirmPassword = '';
-  
+
+  constructor(private auth: Auth, private router: Router) {}
+
   loading = signal(false);
   error = signal<string | null>(null);
 

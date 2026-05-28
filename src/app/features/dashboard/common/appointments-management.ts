@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Auth } from '../../../core/auth';
@@ -67,6 +67,11 @@ import { environment } from '../../../../environments/environment';
             <span class="status-badge" [class]="app.status.toLowerCase()">
               {{ app.status === 'CONFIRMED' ? 'CONFIRMAT' : (app.status === 'COMPLETED' ? 'FINALIZAT' : app.status) }}
             </span>
+            <button *ngIf="app.status === 'PENDING' && role() === 'DOCTOR'"
+                    class="take-btn"
+                    (click)="updateStatus(app.id, 'CONFIRMED')">
+              <i class="bi bi-person-check"></i> Preia
+            </button>
           </div>
         </div>
 
@@ -171,15 +176,18 @@ import { environment } from '../../../../environments/environment';
     .day-info { flex: 1; min-width: 0; }
     .day-name { font-weight: 600; color: #1a202c; font-size: 0.875rem; }
     .day-reason { font-size: 0.78rem; color: #6b7280; }
+    .take-btn {
+      flex-shrink: 0; background: #f0fbfd; border: 1px solid #b2e8f0; border-radius: 0.375rem;
+      color: #2aa8bf; font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.65rem;
+      cursor: pointer; display: flex; align-items: center; gap: 0.3rem; transition: all 0.15s;
+    }
+    .take-btn:hover { background: #2aa8bf; color: #fff; border-color: #2aa8bf; }
   `]
 })
 export class AppointmentsManagement implements OnInit {
-  private http = inject(HttpClient);
-  private auth = inject(Auth);
-
   appointments = signal<any[]>([]);
-  role = signal(this.auth.currentRole());
-  title = signal(this.auth.currentRole() === 'DOCTOR' ? 'Agenda Mea' : 'Programari Clinica');
+  role: any;
+  title: any;
   currentMonth = signal(new Date());
   selectedDay = signal<Date | null>(null);
 
@@ -219,6 +227,11 @@ export class AppointmentsManagement implements OnInit {
     if (!day) return [];
     return this.appointments().filter(a => this.isSameDay(new Date(a.appointmentTime), day));
   });
+
+  constructor(private http: HttpClient, private auth: Auth) {
+    this.role = auth.currentRole;
+    this.title = signal(auth.currentRole() === 'DOCTOR' ? 'Agenda Mea' : 'Programari Clinica');
+  }
 
   ngOnInit() { this.loadAppointments(); }
 

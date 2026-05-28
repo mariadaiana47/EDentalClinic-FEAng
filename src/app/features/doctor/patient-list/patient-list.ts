@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -115,15 +115,17 @@ import { Patient } from '../../../core/models/patient.model';
   `]
 })
 export class PatientList implements OnInit {
-  private patientService = inject(PatientService);
-  private router = inject(Router);
-
   allPatients = signal<Patient[]>([]);
   filteredPatients = signal<Patient[]>([]);
   loading = signal(true);
   searchQuery = '';
   isMine = false;
-  private route = inject(ActivatedRoute);
+
+  constructor(
+    private patientService: PatientService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.isMine = this.router.url.includes('patients');

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -194,12 +194,6 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
   `]
 })
 export class PatientDashboard implements OnInit {
-  private http = inject(HttpClient);
-  private patientService = inject(PatientService);
-  private xrayService = inject(XRayService);
-  private treatmentService = inject(TreatmentService);
-  private examService = inject(ClinicalExamService);
-
   patient = signal<any>(null);
   dentalRecord = signal<any>(null);
   xrayRequests = signal<any[]>([]);
@@ -210,6 +204,14 @@ export class PatientDashboard implements OnInit {
   selectedRadId: number | null = null;
   appointmentDate: string = '';
   viewingId = signal<number | null>(null);
+
+  constructor(
+    private http: HttpClient,
+    private patientService: PatientService,
+    private xrayService: XRayService,
+    private treatmentService: TreatmentService,
+    private examService: ClinicalExamService
+  ) {}
 
   ngOnInit() {
     this.loadMyData();

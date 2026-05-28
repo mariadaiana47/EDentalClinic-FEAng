@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Auth } from '../../../core/auth';
@@ -121,11 +121,14 @@ import { ToastService } from '../../../core/services/toast.service';
   `]
 })
 export class DentistListComponent implements OnInit {
-  private http = inject(HttpClient);
-  private auth = inject(Auth);
-  private patientService = inject(PatientService);
-  private toastService = inject(ToastService);
   doctors = signal<any[]>([]);
+
+  constructor(
+    private http: HttpClient,
+    private auth: Auth,
+    private patientService: PatientService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit() {
     this.http.get<any[]>(`${environment.apiUrl}/doctors`).subscribe(d => this.doctors.set(d));

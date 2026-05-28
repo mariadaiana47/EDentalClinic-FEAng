@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PatientSearch } from '../../../shared/components/patient-search/patient-search';
@@ -16,10 +16,12 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./add-clinical-exam.css']
 })
 export class AddClinicalExam implements OnInit {
-  private examService = inject(ClinicalExamService);
-  private patientService = inject(PatientService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  constructor(
+    private examService: ClinicalExamService,
+    private patientService: PatientService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   selectedPatient = signal<Patient | null>(null);
   loading = signal(false);

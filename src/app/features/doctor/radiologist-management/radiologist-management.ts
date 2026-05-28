@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DoctorService } from '../../../core/services/doctor.service';
@@ -129,7 +129,7 @@ import { Radiologist } from '../../../core/models/radiologist.model';
   `]
 })
 export class RadiologistManagement implements OnInit {
-  private doctorService = inject(DoctorService);
+  constructor(private doctorService: DoctorService) {}
 
   radiologists = signal<Radiologist[]>([]);
   loading = signal(false);

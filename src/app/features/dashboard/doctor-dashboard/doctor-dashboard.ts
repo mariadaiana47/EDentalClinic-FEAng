@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PatientService } from '../../../core/services/patient.service';
@@ -126,14 +126,15 @@ import { Auth } from '../../../core/auth';
   `]
 })
 export class DoctorDashboard implements OnInit {
-  private patientService = inject(PatientService);
-  private doctorService = inject(DoctorService);
-  auth = inject(Auth);
-
   patientCount = signal<number | null>(null);
   radiologistCount = signal<number | null>(null);
+  greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Buna seara' : 'Buna ziua');
 
-  readonly greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Buna seara' : 'Buna ziua');
+  constructor(
+    private patientService: PatientService,
+    private doctorService: DoctorService,
+    public auth: Auth
+  ) {}
 
   ngOnInit() {
     this.patientService.list(true).subscribe(p => this.patientCount.set(p.length));

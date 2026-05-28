@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthResponse } from './models/auth-response.model';
@@ -20,11 +20,8 @@ const LAST_NAME_KEY = 'edc_lname';
 const PROFILE_PIC_KEY = 'edc_pic';
 const TEMP_PWD_KEY = 'edc_temp_pwd';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class Auth {
-  private http = inject(HttpClient);
   private api = `${environment.apiUrl}/auth`;
 
   readonly currentRole = signal<Role | null>(this.readRole());
@@ -34,6 +31,7 @@ export class Auth {
   readonly profilePicture = signal<string | null>(localStorage.getItem(PROFILE_PIC_KEY));
   readonly mustChangePassword = signal<boolean>(localStorage.getItem(TEMP_PWD_KEY) === 'true');
 
+  constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.api}/login`, { email, password }).pipe(

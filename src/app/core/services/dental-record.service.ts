@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseApi } from './base-api';
 import { API_ROUTES } from '../constants/api-routes';
@@ -12,6 +13,10 @@ export interface RecordInfoCreate {
 
 @Injectable({ providedIn: 'root' })
 export class DentalRecordService extends BaseApi {
+  constructor(http: HttpClient) {
+    super(http);
+  }
+
   byPatient(patientId: number): Observable<DentalRecord> {
     return this.http.get<DentalRecord>(API_ROUTES.DENTAL_RECORDS.BY_PATIENT(patientId));
   }

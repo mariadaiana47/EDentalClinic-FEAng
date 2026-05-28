@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -20,13 +20,15 @@ import { DentalChart } from '../../../shared/components/dental-chart/dental-char
   styleUrls: ['./patient-details.css']
 })
 export class PatientDetails implements OnInit {
-  private route = inject(ActivatedRoute);
-  private patientService = inject(PatientService);
-  private examService = inject(ClinicalExamService);
-  private treatmentService = inject(TreatmentService);
-  private xrayService = inject(XRayService);
-  private http = inject(HttpClient);
-  private auth = inject(Auth);
+  constructor(
+    private route: ActivatedRoute,
+    private patientService: PatientService,
+    private examService: ClinicalExamService,
+    private treatmentService: TreatmentService,
+    private xrayService: XRayService,
+    private http: HttpClient,
+    private auth: Auth
+  ) {}
 
   patient = signal<Patient | null>(null);
   dentalRecord = signal<any>(null);

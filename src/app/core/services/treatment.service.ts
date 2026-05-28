@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ROUTES } from '../constants/api-routes';
@@ -11,11 +11,9 @@ export interface Treatment {
   createdAt?: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class TreatmentService {
-  private http = inject(HttpClient);
+  constructor(private http: HttpClient) {}
 
   add(patientId: number, treatment: Treatment): Observable<Treatment> {
     return this.http.post<Treatment>(`${API_ROUTES.TREATMENTS.BASE}/patient/${patientId}`, treatment);

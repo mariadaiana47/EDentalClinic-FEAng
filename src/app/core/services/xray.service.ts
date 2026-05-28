@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_ROUTES } from '../constants/api-routes';
@@ -12,11 +12,9 @@ export interface XRayRequest {
   createdAt?: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class XRayService {
-  private http = inject(HttpClient);
+  constructor(private http: HttpClient) {}
 
   create(patientId: number, request: XRayRequest): Observable<XRayRequest> {
     return this.http.post<XRayRequest>(`${API_ROUTES.XRAY_REQUESTS.BASE}/patient/${patientId}`, request);
