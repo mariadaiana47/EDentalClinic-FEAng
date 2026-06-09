@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { XRayService } from '../../../core/services/xray.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { API_ROUTES } from '../../../core/constants/api-routes';
 
 @Component({
@@ -91,7 +92,7 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
   `]
 })
 export class XRayScheduling implements OnInit {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toast: ToastService) {}
 
   pendingRequests = signal<any[]>([]);
   affiliatedRadiologists = signal<any[]>([]);
@@ -128,7 +129,7 @@ export class XRayScheduling implements OnInit {
         appointmentTime: this.appointmentDate
       }
     }).subscribe(() => {
-      alert('Programare realizata cu succes!');
+      this.toast.show('Programare realizata cu succes!', 'success');
       this.loadRequests();
     });
   }

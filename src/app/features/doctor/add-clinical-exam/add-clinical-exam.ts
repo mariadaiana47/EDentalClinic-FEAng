@@ -6,6 +6,7 @@ import { DentalChart } from '../../../shared/components/dental-chart/dental-char
 import { Patient } from '../../../core/models/patient.model';
 import { ClinicalExamService } from '../../../core/services/clinical-exam.service';
 import { PatientService } from '../../../core/services/patient.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -19,6 +20,7 @@ export class AddClinicalExam implements OnInit {
   constructor(
     private examService: ClinicalExamService,
     private patientService: PatientService,
+    private toast: ToastService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -80,7 +82,7 @@ export class AddClinicalExam implements OnInit {
       },
       error: (err) => {
         this.loading.set(false);
-        alert('Eroare la salvare: ' + (err.error?.message || 'Eroare necunoscuta'));
+        this.toast.show('Eroare la salvare: ' + (err.error?.message || 'Eroare necunoscuta'), 'error');
       }
     });
   }

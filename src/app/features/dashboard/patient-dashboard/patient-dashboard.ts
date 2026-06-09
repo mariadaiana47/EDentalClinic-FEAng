@@ -6,6 +6,7 @@ import { PatientService } from '../../../core/services/patient.service';
 import { XRayService } from '../../../core/services/xray.service';
 import { TreatmentService } from '../../../core/services/treatment.service';
 import { ClinicalExamService } from '../../../core/services/clinical-exam.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { API_ROUTES } from '../../../core/constants/api-routes';
 
 @Component({
@@ -210,7 +211,8 @@ export class PatientDashboard implements OnInit {
     private patientService: PatientService,
     private xrayService: XRayService,
     private treatmentService: TreatmentService,
-    private examService: ClinicalExamService
+    private examService: ClinicalExamService,
+    private toast: ToastService
   ) {}
 
   ngOnInit() {
@@ -248,7 +250,7 @@ export class PatientDashboard implements OnInit {
         appointmentTime: this.appointmentDate
       }
     }).subscribe(() => {
-      alert('Programare realizata cu succes!');
+      this.toast.show('Programare realizata cu succes!', 'success');
       this.loadMyData();
     });
   }

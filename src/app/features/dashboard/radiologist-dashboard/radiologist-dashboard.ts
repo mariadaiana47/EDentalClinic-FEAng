@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { API_ROUTES } from '../../../core/constants/api-routes';
 import { Auth } from '../../../core/auth';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-radiologist-dashboard',
@@ -232,7 +233,7 @@ export class RadiologistDashboard implements OnInit {
   selectedFiles: { [key: number]: File } = {};
   greeting = signal(new Date().getHours() >= 18 || new Date().getHours() < 5 ? 'Buna seara' : 'Buna ziua');
 
-  constructor(private http: HttpClient, public auth: Auth) {}
+  constructor(private http: HttpClient, public auth: Auth, private toast: ToastService) {}
 
   ngOnInit() {
     this.loadRequests();
@@ -270,11 +271,11 @@ export class RadiologistDashboard implements OnInit {
         this.uploadingId.set(null);
         delete this.selectedFiles[requestId];
         this.loadRequests();
-        alert('Radiografia a fost incarcata cu succes!');
+        this.toast.show('Radiografia a fost incarcata cu succes!', 'success');
       },
       error: () => {
         this.uploadingId.set(null);
-        alert('Eroare la incarcare.');
+        this.toast.show('Eroare la incarcare.', 'error');
       }
     });
   }

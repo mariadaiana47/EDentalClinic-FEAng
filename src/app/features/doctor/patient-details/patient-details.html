@@ -16,12 +16,14 @@
       <button *ngIf="!isAssigned()" class="btn-pickup" (click)="assignPatient()">
         <i class="bi bi-person-check"></i> Preia Pacient
       </button>
-      <a class="btn-primary-teal" [routerLink]="['/doctor/patient', patient()?.id, 'add-clinical-exam']">
-        <i class="bi bi-plus-circle"></i> Examen Clinic Nou
-      </a>
-      <button class="btn-outline-teal" (click)="showXrayForm.set(!showXrayForm())">
-        <i class="bi bi-broadcast-pin"></i> Solicita Radiografie
-      </button>
+      <ng-container *ngIf="clinicalExam()">
+        <a class="btn-primary-teal" [routerLink]="['/doctor/patient', patient()?.id, 'add-clinical-exam']">
+          <i class="bi bi-plus-circle"></i> Examen Clinic Nou
+        </a>
+        <button class="btn-outline-teal" (click)="showXrayForm.set(!showXrayForm())">
+          <i class="bi bi-broadcast-pin"></i> Solicita Radiografie
+        </button>
+      </ng-container>
     </div>
   </div>
 
@@ -111,7 +113,16 @@
             </div>
           </div>
           <ng-template #noExam>
-            <p class="empty-msg">Nu exista examene clinice inregistrate.</p>
+            <div class="no-exam-banner">
+              <div class="no-exam-icon"><i class="bi bi-exclamation-circle-fill"></i></div>
+              <div class="no-exam-text">
+                <p class="no-exam-title">Dosarul nu conține examenul clinic</p>
+                <p class="no-exam-sub">Adăugați un examen clinic pentru a completa dosarul stomatologic al pacientului.</p>
+              </div>
+              <a class="btn-add-exam" [routerLink]="['/doctor/patient', patient()?.id, 'add-clinical-exam']">
+                <i class="bi bi-plus-circle-fill"></i> Adaugă examen clinic
+              </a>
+            </div>
           </ng-template>
         </div>
       </div>
@@ -146,6 +157,53 @@
         </div>
       </div>
 
+      <!-- ═══════════════════════════════ PLAN TRATAMENT ═══════════════════ -->
+      <div class="section-card">
+        <div class="section-head">
+          <span><i class="bi bi-journal-medical"></i> Plan de Tratament</span>
+          <button class="btn-toggle" (click)="editPlan(); showPlanForm.set(true)">
+            <i class="bi bi-pencil-fill"></i>
+            {{ treatmentPlan() ? 'Editeaza' : 'Adauga Plan' }}
+          </button>
+        </div>
+        <div class="section-body">
+
+          <div *ngIf="showPlanForm()" class="add-treatment-box">
+            <div class="field">
+              <label>Diagnostic general</label>
+              <input type="text" [(ngModel)]="newPlan.diagnosis" placeholder="ex: Carie multipla, Parodontita...">
+            </div>
+            <div class="field mt-s">
+              <label>Descriere plan tratament <span class="req">*</span></label>
+              <textarea [(ngModel)]="newPlan.description" rows="3" placeholder="Descrieti planul de tratament propus..."></textarea>
+            </div>
+            <div class="form-actions mt-s">
+              <button class="btn-save-sm" (click)="savePlan()"><i class="bi bi-check-lg"></i> Salveaza Planul</button>
+              <button class="btn-cancel-sm" (click)="showPlanForm.set(false)"><i class="bi bi-x-lg"></i> Anuleaza</button>
+            </div>
+          </div>
+
+          <div *ngIf="treatmentPlan() && !showPlanForm()" class="plan-display">
+            <div *ngIf="treatmentPlan()?.diagnosis" class="plan-item">
+              <span class="plan-label">Diagnostic:</span>
+              <span class="plan-value">{{ treatmentPlan()!.diagnosis }}</span>
+            </div>
+            <div class="plan-item">
+              <span class="plan-label">Plan:</span>
+              <span class="plan-value">{{ treatmentPlan()!.description }}</span>
+            </div>
+            <div *ngIf="treatmentPlan()?.totalCosts" class="plan-item">
+              <span class="plan-label">Cost total estimat:</span>
+              <span class="plan-value plan-cost">{{ treatmentPlan()!.totalCosts }} RON</span>
+            </div>
+            <div class="plan-date">Actualizat: {{ treatmentPlan()!.updatedAt | date:'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+
+          <p *ngIf="!treatmentPlan() && !showPlanForm()" class="empty-msg">Niciun plan de tratament definit.</p>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════ TRATAMENTE ════════════════════════ -->
       <div class="section-card">
         <div class="section-head">
           <span><i class="bi bi-bandaid-fill"></i> Tratamente Efectuate</span>
@@ -156,19 +214,20 @@
         </div>
         <div class="section-body">
 
+          <!-- Formular adaugare tratament -->
           <div *ngIf="showAddTreatment()" class="add-treatment-box">
             <div class="treatment-form-row">
               <div class="field flex-3">
-                <label>Descriere tratament</label>
+                <label>Descriere tratament <span class="req">*</span></label>
                 <input type="text" [(ngModel)]="newTreatment.description" placeholder="ex: Detartraj, Obturatie...">
               </div>
               <div class="field flex-2">
-                <label>Dinti</label>
-                <input type="text" [(ngModel)]="newTreatment.teethInvolved" placeholder="ex: 18, 17">
+                <label>Diagnostic</label>
+                <input type="text" [(ngModel)]="newTreatment.diagnosis" placeholder="ex: Carie cl. II">
               </div>
-              <div class="field flex-1">
-                <label>Cost (RON)</label>
-                <input type="number" [(ngModel)]="newTreatment.cost" placeholder="0">
+              <div class="field flex-2">
+                <label>Dinti</label>
+                <input type="text" [(ngModel)]="newTreatment.teethInvolved" placeholder="ex: 16, 17">
               </div>
               <div class="field-actions">
                 <label>&nbsp;</label>
@@ -180,19 +239,142 @@
             </div>
           </div>
 
-          <div *ngFor="let t of treatments()" class="treatment-row">
-            <div>
-              <span class="t-desc">{{ t.description }}</span>
-              <span class="t-teeth" *ngIf="t.teethInvolved"> · {{ t.teethInvolved }}</span>
+          <!-- Lista tratamente -->
+          <div *ngFor="let t of treatments()" class="treatment-card">
+            <div class="treatment-card-head" (click)="toggleTreatment(t.id!)">
+              <div class="t-card-left">
+                <i class="bi bi-chevron-right expand-icon" [class.rotated]="expandedTreatmentId() === t.id"></i>
+                <span class="t-desc">{{ t.description }}</span>
+                <span class="t-teeth" *ngIf="t.teethInvolved"> · {{ t.teethInvolved }}</span>
+                <span class="t-diag badge-diag" *ngIf="t.diagnosis"> {{ t.diagnosis }}</span>
+              </div>
+              <div class="t-right">
+                <span class="t-cost" *ngIf="t.cost">{{ t.cost }} RON</span>
+                <span class="t-date">{{ t.createdAt | date:'dd/MM/yy' }}</span>
+              </div>
             </div>
-            <div class="t-right">
-              <span class="t-cost">{{ t.cost }} RON</span>
-              <span class="t-date">{{ t.createdAt | date:'dd/MM/yy' }}</span>
+
+            <!-- Detalii expandate: Faze + Lucrari protetice -->
+            <div *ngIf="expandedTreatmentId() === t.id" class="treatment-card-body">
+
+              <!-- ── Faze tratament ── -->
+              <div class="sub-section">
+                <div class="sub-section-head">
+                  <span><i class="bi bi-list-check"></i> Faze Tratament</span>
+                  <button class="btn-add-sub" (click)="showAddPhase.set(showAddPhase() === t.id ? null : t.id!)">
+                    <i class="bi bi-plus-lg"></i> Adauga Faza
+                  </button>
+                </div>
+
+                <div *ngIf="showAddPhase() === t.id" class="sub-form">
+                  <div class="sub-form-row">
+                    <div class="field flex-1">
+                      <label>Data <span class="req">*</span></label>
+                      <input type="date" [(ngModel)]="newPhase.date">
+                    </div>
+                    <div class="field flex-3">
+                      <label>Descriere <span class="req">*</span></label>
+                      <input type="text" [(ngModel)]="newPhase.description" placeholder="ex: Indepartare carie, aplicare obtturatie...">
+                    </div>
+                    <div class="field flex-2">
+                      <label>Substante folosite</label>
+                      <input type="text" [(ngModel)]="newPhase.substances" placeholder="ex: Composite, Eugenol...">
+                    </div>
+                    <div class="field flex-1">
+                      <label>Cost (RON)</label>
+                      <input type="number" [(ngModel)]="newPhase.costs" placeholder="0">
+                    </div>
+                    <div class="field-actions">
+                      <label>&nbsp;</label>
+                      <div class="action-btns">
+                        <button class="btn-save" (click)="savePhase(t.id!)"><i class="bi bi-check-lg"></i></button>
+                        <button class="btn-cancel" (click)="showAddPhase.set(null)"><i class="bi bi-x-lg"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngFor="let ph of treatmentPhases()[t.id!]" class="sub-row">
+                  <div class="sub-row-left">
+                    <span class="sub-date">{{ ph.date | date:'dd/MM/yy' }}</span>
+                    <span class="sub-desc">{{ ph.description }}</span>
+                    <span class="sub-substances" *ngIf="ph.substances"> · {{ ph.substances }}</span>
+                  </div>
+                  <div class="sub-row-right">
+                    <span class="sub-cost" *ngIf="ph.costs">{{ ph.costs }} RON</span>
+                    <button class="btn-del-sub" (click)="deletePhase(t.id!, ph.id!)"><i class="bi bi-trash3"></i></button>
+                  </div>
+                </div>
+                <p *ngIf="!treatmentPhases()[t.id!]?.length && showAddPhase() !== t.id" class="empty-sub">Nicio faza inregistrata.</p>
+              </div>
+
+              <!-- ── Lucrari protetice ── -->
+              <div class="sub-section">
+                <div class="sub-section-head">
+                  <span><i class="bi bi-tools"></i> Lucrari Protetice</span>
+                  <button class="btn-add-sub" (click)="showAddWork.set(showAddWork() === t.id ? null : t.id!)">
+                    <i class="bi bi-plus-lg"></i> Adauga Lucrare
+                  </button>
+                </div>
+
+                <div *ngIf="showAddWork() === t.id" class="sub-form">
+                  <div class="sub-form-row">
+                    <div class="field flex-1">
+                      <label>Tip <span class="req">*</span></label>
+                      <select [(ngModel)]="newWork.type">
+                        <option *ngFor="let pt of protheticTypes" [value]="pt">{{ protheticLabels[pt] }}</option>
+                      </select>
+                    </div>
+                    <div class="field flex-1">
+                      <label>Dinti <span class="req">*</span></label>
+                      <input type="text" [(ngModel)]="newWork.teethNumbers" placeholder="ex: 14, 15">
+                    </div>
+                    <div class="field flex-2">
+                      <label>Material</label>
+                      <input type="text" [(ngModel)]="newWork.material" placeholder="ex: Zirconiu, Metal-ceramica...">
+                    </div>
+                    <div class="field flex-2">
+                      <label>Realizat de</label>
+                      <input type="text" [(ngModel)]="newWork.performedBy" placeholder="Medic / Tehnician">
+                    </div>
+                    <div class="field flex-1">
+                      <label>Data</label>
+                      <input type="date" [(ngModel)]="newWork.datePerformed">
+                    </div>
+                    <div class="field flex-1">
+                      <label>Cost (RON)</label>
+                      <input type="number" [(ngModel)]="newWork.cost" placeholder="0">
+                    </div>
+                    <div class="field-actions">
+                      <label>&nbsp;</label>
+                      <div class="action-btns">
+                        <button class="btn-save" (click)="saveWork(t.id!)"><i class="bi bi-check-lg"></i></button>
+                        <button class="btn-cancel" (click)="showAddWork.set(null)"><i class="bi bi-x-lg"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngFor="let w of treatmentWorks()[t.id!]" class="sub-row">
+                  <div class="sub-row-left">
+                    <span class="badge-type">{{ protheticLabels[w.type] }}</span>
+                    <span class="sub-desc">Dinti: {{ w.teethNumbers }}</span>
+                    <span *ngIf="w.material" class="sub-substances"> · {{ w.material }}</span>
+                    <span *ngIf="w.performedBy" class="sub-substances"> · {{ w.performedBy }}</span>
+                  </div>
+                  <div class="sub-row-right">
+                    <span *ngIf="w.datePerformed" class="sub-date">{{ w.datePerformed | date:'dd/MM/yy' }}</span>
+                    <span class="sub-cost" *ngIf="w.cost">{{ w.cost }} RON</span>
+                    <button class="btn-del-sub" (click)="deleteWork(t.id!, w.id!)"><i class="bi bi-trash3"></i></button>
+                  </div>
+                </div>
+                <p *ngIf="!treatmentWorks()[t.id!]?.length && showAddWork() !== t.id" class="empty-sub">Nicio lucrare protetica inregistrata.</p>
+              </div>
+
             </div>
           </div>
 
-          <p *ngIf="treatments().length === 0 && !showAddTreatment()" class="empty-msg">Niciun tratament inregistrat.
-          </p>
+          <p *ngIf="treatments().length === 0 && !showAddTreatment()" class="empty-msg">Niciun tratament inregistrat.</p>
         </div>
       </div>
 
