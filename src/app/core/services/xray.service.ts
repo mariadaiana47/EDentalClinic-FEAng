@@ -10,6 +10,7 @@ export interface XRayRequest {
   details?: string;
   status?: string;
   createdAt?: string;
+  xray?: { id?: number };
 }
 
 @Injectable({ providedIn: 'root' })

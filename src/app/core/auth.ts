@@ -51,6 +51,14 @@ export class Auth {
   }
 
   logout(): void {
+    // Invalideaza token-ul server-side (blacklist)
+    const token = this.getToken();
+    if (token) {
+      this.http.post(`${this.api}/logout`, {}, { responseType: 'text' }).subscribe({
+        error: () => {} // Ignora erorile de retea la logout
+      });
+    }
+    // Sterge sesiunea locala
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(ROLE_KEY);
     localStorage.removeItem(EMAIL_KEY);

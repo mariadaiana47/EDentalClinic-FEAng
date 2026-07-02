@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { XRayService } from '../../../core/services/xray.service';
 import { ToastService } from '../../../core/services/toast.service';
 import { API_ROUTES } from '../../../core/constants/api-routes';
 
@@ -33,19 +32,61 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
           </div>
 
           <div class="scheduling-box">
-            <p class="sched-hint"><i class="bi bi-info-circle"></i> Alegeti un radiolog si data programarii:</p>
-            <div class="sched-row">
-              <select [(ngModel)]="selectedRadId" class="pd-input">
-                <option [value]="null">Selectati Radiologul</option>
+            <p class="sched-hint"><i class="bi bi-info-circle"></i> Alegeti un radiolog, data si intervalul orar disponibil:</p>
+
+            <!-- Pasul 1: Selectare radiolog -->
+            <div class="sched-step">
+              <label class="step-label">1. Selectati radiologul</label>
+              <select [(ngModel)]="selectedRadId" (ngModelChange)="onRadiologistChange()" class="pd-input">
+                <option [value]="null">— Selectati Radiologul —</option>
                 <option *ngFor="let r of affiliatedRadiologists()" [value]="r.id">
-                  {{ r.firstName }} {{ r.lastName }} – {{ r.clinicName || 'Clinic' }}
+                  {{ r.firstName }} {{ r.lastName }} – {{ r.clinicName || 'Clinica' }}
                 </option>
               </select>
-              <input type="datetime-local" [(ngModel)]="appointmentDate" class="pd-input">
-              <button class="btn-confirm" (click)="confirmScheduling(x.id!)" [disabled]="!selectedRadId || !appointmentDate">
-                <i class="bi bi-check-lg"></i> Confirma
-              </button>
             </div>
+
+            <!-- Pasul 2: Selectare data -->
+            <div class="sched-step" *ngIf="selectedRadId">
+              <label class="step-label">2. Alegeti data</label>
+              <input
+                type="date"
+                [(ngModel)]="selectedDate"
+                (ngModelChange)="onDateChange()"
+                [min]="todayStr"
+                class="pd-input"
+              />
+            </div>
+
+            <!-- Pasul 3: Selectare slot orar -->
+            <div class="sched-step" *ngIf="selectedDate && availableSlots().length > 0">
+              <label class="step-label">3. Alegeti intervalul orar disponibil</label>
+              <div class="slots-grid">
+                <button
+                  *ngFor="let slot of availableSlots()"
+                  class="slot-btn"
+                  [class.selected]="selectedSlot === slot"
+                  (click)="selectedSlot = slot"
+                >
+                  {{ slot }}
+                </button>
+              </div>
+            </div>
+
+            <div class="no-slots-msg" *ngIf="selectedDate && availableSlots().length === 0 && !loadingSlots()">
+              <i class="bi bi-exclamation-circle"></i> Nu exista intervale disponibile in aceasta zi. Alegeti alta data.
+            </div>
+
+            <div class="loading-msg" *ngIf="loadingSlots()">
+              <i class="bi bi-hourglass-split"></i> Se incarca intervalele disponibile...
+            </div>
+
+            <button
+              class="btn-confirm"
+              (click)="confirmScheduling(x.id!)"
+              [disabled]="!selectedRadId || !selectedDate || !selectedSlot"
+            >
+              <i class="bi bi-check-lg"></i> Confirma Programarea
+            </button>
           </div>
         </div>
       </div>
@@ -74,20 +115,31 @@ import { API_ROUTES } from '../../../core/constants/api-routes';
     .info-val { color: #374151; font-size: 0.9rem; margin: 0; }
 
     .scheduling-box { background: #f7fdfe; border: 1px solid #d9f2f7; border-radius: 0.5rem; padding: 1rem; margin-top: 1rem; }
-    .sched-hint { font-size: 0.82rem; color: #6b7280; margin: 0 0 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
-    .sched-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.75rem; align-items: center; }
-    
+    .sched-hint { font-size: 0.82rem; color: #6b7280; margin: 0 0 1rem; display: flex; align-items: center; gap: 0.4rem; }
+
+    .sched-step { margin-bottom: 1rem; }
+    .step-label { display: block; font-size: 0.8rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem; }
+
     .pd-input { padding: 0.6rem 0.75rem; border: 1px solid #d1d5db; border-radius: 0.45rem; font-size: 0.875rem; color: #1a202c; background: #fff; outline: none; width: 100%; font-family: inherit; }
     .pd-input:focus { border-color: #3cbdd4; box-shadow: 0 0 0 3px rgba(60,189,212,0.12); }
 
-    .btn-confirm { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.25rem; background: #3cbdd4; color: #fff; border: none; border-radius: 0.45rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; }
+    .slots-grid { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .slot-btn { padding: 0.45rem 1rem; border: 1.5px solid #d1d5db; border-radius: 0.4rem; background: #fff; font-size: 0.875rem; cursor: pointer; color: #374151; transition: all 0.15s; }
+    .slot-btn:hover { border-color: #3cbdd4; color: #0d3d56; }
+    .slot-btn.selected { background: #3cbdd4; border-color: #3cbdd4; color: #fff; font-weight: 600; }
+
+    .no-slots-msg { font-size: 0.85rem; color: #ef4444; display: flex; align-items: center; gap: 0.4rem; margin: 0.5rem 0 1rem; }
+    .loading-msg { font-size: 0.85rem; color: #6b7280; display: flex; align-items: center; gap: 0.4rem; margin: 0.5rem 0 1rem; }
+
+    .btn-confirm { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.25rem; background: #3cbdd4; color: #fff; border: none; border-radius: 0.45rem; cursor: pointer; font-weight: 600; font-size: 0.875rem; margin-top: 0.75rem; }
     .btn-confirm:disabled { background: #a8dfe9; cursor: not-allowed; }
     .btn-confirm:hover:not(:disabled) { background: #2aa8bf; }
 
     .empty-msg { color: #9ca3af; font-style: italic; font-size: 0.9rem; margin: 0; }
 
     @media (max-width: 768px) {
-      .sched-row { grid-template-columns: 1fr; }
+      .slots-grid { gap: 0.4rem; }
+      .slot-btn { padding: 0.4rem 0.75rem; font-size: 0.8rem; }
     }
   `]
 })
@@ -96,8 +148,13 @@ export class XRayScheduling implements OnInit {
 
   pendingRequests = signal<any[]>([]);
   affiliatedRadiologists = signal<any[]>([]);
+  availableSlots = signal<string[]>([]);
+  loadingSlots = signal<boolean>(false);
+
   selectedRadId: number | null = null;
-  appointmentDate: string = '';
+  selectedDate: string = '';
+  selectedSlot: string = '';
+  todayStr = new Date().toISOString().split('T')[0];
 
   ngOnInit() {
     this.loadRequests();
@@ -120,17 +177,57 @@ export class XRayScheduling implements OnInit {
     });
   }
 
+  onRadiologistChange() {
+    this.selectedDate = '';
+    this.selectedSlot = '';
+    this.availableSlots.set([]);
+  }
+
+  onDateChange() {
+    this.selectedSlot = '';
+    this.availableSlots.set([]);
+
+    if (!this.selectedRadId || !this.selectedDate) return;
+
+    this.loadingSlots.set(true);
+    this.http.get<string[]>(
+      `${API_ROUTES.RADIOLOGISTS.BASE}/${this.selectedRadId}/available-slots`,
+      { params: { date: this.selectedDate } }
+    ).subscribe({
+      next: slots => {
+        this.availableSlots.set(slots);
+        this.loadingSlots.set(false);
+      },
+      error: () => {
+        this.availableSlots.set([]);
+        this.loadingSlots.set(false);
+      }
+    });
+  }
+
   confirmScheduling(requestId: number) {
-    if (!this.selectedRadId || !this.appointmentDate) return;
+    if (!this.selectedRadId || !this.selectedDate || !this.selectedSlot) return;
+
+    // Construieste ISO datetime din data + slot orar (HH:mm)
+    const appointmentTime = `${this.selectedDate}T${this.selectedSlot}:00`;
 
     this.http.post(`${API_ROUTES.XRAY_REQUESTS.BASE}/${requestId}/select-radiologist`, null, {
       params: {
         radiologistId: this.selectedRadId.toString(),
-        appointmentTime: this.appointmentDate
+        appointmentTime
       }
-    }).subscribe(() => {
-      this.toast.show('Programare realizata cu succes!', 'success');
-      this.loadRequests();
+    }).subscribe({
+      next: () => {
+        this.toast.show('Programare realizata cu succes!', 'success');
+        this.selectedRadId = null;
+        this.selectedDate = '';
+        this.selectedSlot = '';
+        this.availableSlots.set([]);
+        this.loadRequests();
+      },
+      error: () => {
+        this.toast.show('Eroare la realizarea programarii. Incercati din nou.', 'error');
+      }
     });
   }
 }

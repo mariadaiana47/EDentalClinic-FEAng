@@ -150,7 +150,19 @@
               </div>
             </div>
             <div *ngIf="expandedXray() === x.id" class="xray-viewer">
-              <img [src]="getImageUrl(x.xray?.id)" alt="Radiografie">
+              <div class="xray-viewer-header">
+                <span><i class="bi bi-image-fill"></i> {{ x.type }}</span>
+                <div class="xray-viewer-meta">
+                  <span><i class="bi bi-tooth"></i> {{ x.teethInvolved }}</span>
+                  <span><i class="bi bi-calendar2"></i> {{ x.createdAt | date:'dd/MM/yyyy' }}</span>
+                </div>
+              </div>
+              <div class="xray-viewer-body">
+                <img [src]="getImageUrl(x.xray?.id)" alt="Radiografie {{ x.type }}">
+              </div>
+              <div *ngIf="x.details" class="xray-viewer-footer">
+                <i class="bi bi-chat-text-fill"></i> {{ x.details }}
+              </div>
             </div>
           </div>
           <p *ngIf="xrayRequests().length === 0" class="empty-msg">Nicio radiografie solicitata.</p>
