@@ -7,8 +7,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(Auth);
   const token = auth.getToken();
 
-  const isAuthLogin = req.url.includes('/auth/login');
-  const isAuthRegister = req.url.includes('/auth/register');
+  const isAuthLogin = req.url.endsWith('/auth/login');
+  const isAuthRegister = req.url.endsWith('/auth/register');
 
   if (token && !isAuthLogin && !isAuthRegister) {
     req = req.clone({

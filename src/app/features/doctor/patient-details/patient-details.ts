@@ -12,6 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { Auth } from '../../../core/auth';
 import { environment } from '../../../../environments/environment';
 import { DentalChart } from '../../../shared/components/dental-chart/dental-chart';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-patient-details',
@@ -28,7 +29,8 @@ export class PatientDetails implements OnInit {
     private treatmentService: TreatmentService,
     private xrayService: XRayService,
     private http: HttpClient,
-    private auth: Auth
+    private auth: Auth,
+    private toast: ToastService
   ) {}
 
   patient = signal<Patient | null>(null);
@@ -185,10 +187,17 @@ export class PatientDetails implements OnInit {
   saveXrayRequest() {
     const id = this.patient()?.id;
     if (!id || !this.newXray.teethInvolved) return;
-    this.xrayService.create(id, this.newXray).subscribe(() => {
-      this.loadData(id);
-      this.showXrayForm.set(false);
-      this.newXray = { teethInvolved: '', type: '3D', details: '' };
+    this.xrayService.create(id, this.newXray).subscribe({
+      next: () => {
+        this.loadData(id);
+        this.showXrayForm.set(false);
+        this.newXray = { teethInvolved: '', type: '3D', details: '' };
+        this.toast.show('Cerere de radiografie trimisa catre radiolog.', 'success');
+      },
+      error: (err) => {
+        const message = err?.error?.message || 'Eroare la trimiterea cererii de radiografie. Incercati din nou.';
+        this.toast.show(message, 'error');
+      }
     });
   }
 

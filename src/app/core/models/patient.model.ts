@@ -18,7 +18,7 @@ export interface Patient {
 export interface PatientRegistrationRequest {
   firstName: string;
   lastName: string;
-  cnp: string;
+  pnc: string;
   email: string;
   phone: string;
   age?: number;

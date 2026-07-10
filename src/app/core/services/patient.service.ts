@@ -12,7 +12,7 @@ export class PatientService extends BaseApi {
   }
 
   register(req: PatientRegistrationRequest): Observable<string> {
-    return this.http.post(API_ROUTES.PATIENTS.REGISTER, req, { responseType: 'text' });
+    return this.http.post(API_ROUTES.AUTH.REGISTER_PATIENT, req, { responseType: 'text' });
   }
 
   search(criteria: PatientSearchCriteria): Observable<Patient[]> {

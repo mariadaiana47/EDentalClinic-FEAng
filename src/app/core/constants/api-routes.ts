@@ -6,12 +6,12 @@ export const API_ROUTES = {
   AUTH: {
     LOGIN: `${API}/auth/login`,
     REGISTER: `${API}/auth/register`,
+    REGISTER_PATIENT: `${API}/auth/register-patient`,
     CHANGE_PASSWORD: `${API}/auth/change-password`,
   },
   PATIENTS: {
     BASE: `${API}/patients`,
     ME: `${API}/patients/me`,
-    REGISTER: `${API}/patients/register`,
     SEARCH: `${API}/patients/search`,
     BY_ID: (id: number | string) => `${API}/patients/${id}`,
   },

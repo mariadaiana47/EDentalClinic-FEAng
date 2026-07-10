@@ -23,7 +23,7 @@ export class PatientRegistration {
   form: PatientRegistrationRequest = {
     firstName: '',
     lastName: '',
-    cnp: '',
+    pnc: '',
     email: '',
     phone: '',
     age: undefined,
@@ -48,7 +48,7 @@ export class PatientRegistration {
     this.success.set(null);
     this.tempPassword.set(null);
 
-    if (!this.form.firstName || !this.form.lastName || !this.form.cnp || !this.form.email) {
+    if (!this.form.firstName || !this.form.lastName || !this.form.pnc || !this.form.email) {
       this.error.set('Va rugam sa completati toate campurile obligatorii (*).');
       return;
     }
@@ -75,7 +75,7 @@ export class PatientRegistration {
     this.form = {
       firstName: '',
       lastName: '',
-      cnp: '',
+      pnc: '',
       email: '',
       phone: '',
       age: undefined,
